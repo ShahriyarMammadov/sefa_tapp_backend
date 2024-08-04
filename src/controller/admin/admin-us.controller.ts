@@ -9,23 +9,42 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { CreateAdminDto } from '../../dto/admin/create-admin.dto';
 import { LocalAuthGuard } from '../../local-auth.guard';
 import { AdminService } from '../../services/admin/admin.service';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
+import { LoginDto } from 'src/dto/login/login.dto';
 
+@ApiTags('admin (Register)')
 @Controller('admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Post()
   @UseInterceptors()
-  async createAdmin(@Res() response, @Body() CreateAdminDto: CreateAdminDto) {
+  @ApiOperation({ summary: 'Create New Admin' })
+  @ApiResponse({
+    status: 201,
+    description: 'Admin user has been created successfully.',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiBody({ type: CreateAdminDto })
+  async createAdmin(
+    @Res() response: Response,
+    @Body() createAdminDto: CreateAdminDto,
+  ) {
     try {
-      const newAdmin = await this.adminService.createAdmin(CreateAdminDto);
+      const newAdmin = await this.adminService.createAdmin(createAdminDto);
 
       return response.status(HttpStatus.CREATED).send({
-        message: 'admin user has been created successfully',
+        message: 'Admin user has been created successfully',
         newAdmin,
       });
     } catch (err) {
@@ -39,7 +58,14 @@ export class AdminController {
 
   @UseGuards(LocalAuthGuard)
   @Get()
-  async getAllAdmin(@Req() request: Request, @Res() response) {
+  @ApiOperation({ summary: 'All Admin' })
+  @ApiResponse({
+    status: 200,
+    description: 'All admin data found successfully',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  async getAllAdmin(@Req() request: Request, @Res() response: Response) {
     try {
       const xForwardedFor = request.headers['x-forwarded-for'];
       const ip = Array.isArray(xForwardedFor)

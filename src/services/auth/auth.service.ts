@@ -33,6 +33,7 @@ export class AuthService {
 
     const payload = { username: adminData.username, sub: adminData._id };
     const accessToken = this.jwtService.sign(payload);
+    
     return {
       access_token: accessToken,
     };
