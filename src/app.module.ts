@@ -6,17 +6,21 @@ import { AdminModule } from './modules/admin.module';
 import { AuthModule } from './modules/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { EmailService } from './services/email/send-email.service';
+import { DoctorModule } from './modules/doctor.module';
+import { ClinicsModule } from './modules/clinics.module';
 
 @Module({
   imports: [
     MongooseModule.forRoot(
-      'mongodb+srv://shahriyarmammadov:sehriyar4473@cluster0.7wfkmvc.mongodb.net/?retryWrites=true&w=majority',
+      'mongodb+srv://SefaTapp:sehriyar4473@cluster0.n9byabe.mongodb.net/?retryWrites=true&w=majority',
     ),
     MulterModule.register({
       dest: './uploads',
     }),
     AdminModule,
     AuthModule,
+    DoctorModule,
+    ClinicsModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailService],
