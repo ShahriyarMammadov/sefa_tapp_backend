@@ -8,6 +8,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { EmailService } from './services/email/send-email.service';
 import { DoctorModule } from './modules/doctor.module';
 import { ClinicsModule } from './modules/clinics.module';
+import { MedicineModule } from './modules/medicine.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ClinicsModule } from './modules/clinics.module';
     AuthModule,
     DoctorModule,
     ClinicsModule,
+    MedicineModule
   ],
   controllers: [AppController],
   providers: [AppService, EmailService],

@@ -13,13 +13,7 @@ import { Request, Response } from 'express';
 import { CreateAdminDto } from '../../dto/admin/create-admin.dto';
 import { LocalAuthGuard } from '../../local-auth.guard';
 import { AdminService } from '../../services/admin/admin.service';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBody,
-  ApiBearerAuth,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { LoginDto } from 'src/dto/login/login.dto';
 
 @ApiTags('admin (Register)')
