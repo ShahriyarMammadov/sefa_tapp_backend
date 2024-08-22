@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Delete } from '@nestjs/common';
 import { WishlistService } from '../../services/wishlist/wishlist.service';
 import { WishlistDto } from '../../dto/wishlist/create-wishlist.dto';
 import { Wishlist } from '../../schema/wishlist';
@@ -19,5 +19,10 @@ export class WishlistController {
     @Param('userID') userID: string,
   ): Promise<Wishlist[]> {
     return this.wishlistService.findWishlistByUser(userID);
+  }
+
+  @Delete(':id')
+  async deleteWishlist(@Param('id') id: string): Promise<{ message: string }> {
+    return this.wishlistService.deleteWishlistById(id);
   }
 }

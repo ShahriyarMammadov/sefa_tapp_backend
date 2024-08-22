@@ -91,6 +91,20 @@ export class WishlistService {
     return wishlists;
   }
 
+  async deleteWishlistById(id: string): Promise<{ message: string }> {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException(`Invalid wishlist ID format.`);
+    }
+
+    const result = await this.wishlistModel.deleteOne({ _id: id }).exec();
+
+    if (result.deletedCount === 0) {
+      throw new NotFoundException(`Wishlist with ID ${id} not found.`);
+    }
+
+    return { message: `Wishlist with ID ${id} has been successfully deleted.` };
+  }
+
   // Mock validation methods
   private async checkMedicineExists(medicineID: string): Promise<boolean> {
     const medicine = await this.medicineModel.findById(medicineID).exec();
