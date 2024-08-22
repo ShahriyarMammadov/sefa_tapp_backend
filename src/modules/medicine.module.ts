@@ -12,5 +12,6 @@ import { MedicineService } from 'src/services/medicine/medicine.service';
   ],
   controllers: [MedicineController],
   providers: [MedicineService],
+  exports: [MongooseModule],
 })
 export class MedicineModule {}

@@ -9,6 +9,7 @@ import { EmailService } from './services/email/send-email.service';
 import { DoctorModule } from './modules/doctor.module';
 import { ClinicsModule } from './modules/clinics.module';
 import { MedicineModule } from './modules/medicine.module';
+import { WishlistModule } from './modules/wishlist.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { MedicineModule } from './modules/medicine.module';
     AuthModule,
     DoctorModule,
     ClinicsModule,
-    MedicineModule
+    MedicineModule,
+    WishlistModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailService],

@@ -10,6 +10,6 @@ import { AdminService } from '../services/admin/admin.service';
   ],
   controllers: [AdminController],
   providers: [AdminService],
-  exports: [AdminService],
+  exports: [AdminService, MongooseModule],
 })
 export class AdminModule {}

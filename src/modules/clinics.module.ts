@@ -10,5 +10,6 @@ import { ClinicsService } from 'src/services/clinics/clinic.service';
   ],
   controllers: [ClinicsController],
   providers: [ClinicsService],
+  exports: [MongooseModule],
 })
 export class ClinicsModule {}
