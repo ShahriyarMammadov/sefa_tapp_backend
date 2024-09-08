@@ -10,6 +10,7 @@ import { DoctorModule } from './modules/doctor.module';
 import { ClinicsModule } from './modules/clinics.module';
 import { MedicineModule } from './modules/medicine.module';
 import { WishlistModule } from './modules/wishlist.module';
+import { AppRegisterModule } from './modules/appRegister.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { WishlistModule } from './modules/wishlist.module';
     ClinicsModule,
     MedicineModule,
     WishlistModule,
+    AppRegisterModule
   ],
   controllers: [AppController],
   providers: [AppService, EmailService],
