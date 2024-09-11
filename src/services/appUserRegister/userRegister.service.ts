@@ -11,6 +11,7 @@ import { AppUsers } from '../../schema/appRegister';
 import { EmailService } from '../email/send-email.service';
 import { Otp } from 'src/schema/otp';
 import * as nodemailer from 'nodemailer';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AppUserService {
@@ -33,6 +34,14 @@ export class AppUserService {
   // Generate a random OTP code
   generateOTP(): string {
     return Math.floor(1000 + Math.random() * 9000).toString(); // 4-digit OTP
+  }
+
+  saltOrRounds: number = 10;
+
+  // Hash password
+  async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt();
+    return bcrypt.hash(password, salt);
   }
 
   // Send OTP email
@@ -75,13 +84,24 @@ export class AppUserService {
       }
     }
 
+    // const { repeatPassword, ...userData } = createAppUserDto;
+
+    // Hash the password before saving
+    // const hashedPassword = await this.hashPassword(createAppUserDto.password);
+
+    const hashedPassword = await bcrypt.hash(
+      createAppUserDto.password,
+      this.saltOrRounds,
+    );
+
     const otp = this.generateOTP();
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // OTP expires in 15 minutes
 
     const newUser = new this.appUserModel({
       ...createAppUserDto,
-      otp, // Save OTP directly on the user model if needed
-      isActive: false, // Initially inactive
+      password: hashedPassword,
+      otp,
+      isActive: false,
     });
 
     await newUser.save();
