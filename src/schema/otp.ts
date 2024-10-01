@@ -7,7 +7,7 @@ export class Otp extends Document {
   email: string;
 
   @Prop({ required: true })
-  phoneNumber: number;
+  phoneNumber: string;
 
   @Prop({ required: true })
   otpCode: number;

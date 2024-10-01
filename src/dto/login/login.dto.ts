@@ -10,9 +10,9 @@ export class LoginDto {
   @IsOptional()
   email?: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  phoneNumber?: number;
+  phoneNumber?: string;
 
   @IsString()
   @IsOptional()

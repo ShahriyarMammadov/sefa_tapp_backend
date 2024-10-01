@@ -10,10 +10,10 @@ export class VerifyOtpDto {
   @IsNotEmpty()
   readonly email: string;
 
-  @ApiProperty({ example: 503134473, description: 'User phone number' })
-  @IsNumber()
+  @ApiProperty({ example: '503134473', description: 'User phone number' })
+  @IsString()
   @IsNotEmpty()
-  readonly phoneNumber: number;
+  readonly phoneNumber: string;
 
   @ApiProperty({ example: '123456', description: 'OTP code sent to the user' })
   @IsNumber()

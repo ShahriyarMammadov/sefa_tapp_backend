@@ -7,7 +7,7 @@ export class ContactUs extends Document {
   name: string;
 
   @Prop({ required: true })
-  phoneNumber: number;
+  phoneNumber: string;
 
   @Prop({ required: true })
   email: string;

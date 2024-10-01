@@ -13,7 +13,7 @@ export class UserService {
     return this.userModel.findOne({ email }).exec();
   }
 
-  async findByPhoneNumber(phoneNumber: number): Promise<AppUsers | null> {
+  async findByPhoneNumber(phoneNumber: string): Promise<AppUsers | null> {
     return this.userModel.findOne({ phoneNumber }).exec();
   }
 }

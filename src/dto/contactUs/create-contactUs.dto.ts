@@ -7,10 +7,10 @@ export class CreateContactUsDto {
   @IsNotEmpty()
   readonly name: string;
 
-  @ApiProperty({ example: 994503134473 })
-  @IsNumber()
+  @ApiProperty({ example: '994503134473' })
+  @IsString()
   @IsNotEmpty()
-  readonly phoneNumber: number;
+  readonly phoneNumber: string;
 
   @ApiProperty({ example: 'user@gmail.com' })
   @IsString()
