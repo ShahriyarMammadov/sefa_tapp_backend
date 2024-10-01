@@ -31,7 +31,7 @@ export class AuthService {
 
   private async validateUser(loginDto: LoginDto): Promise<any> {
     const { email, phoneNumber, password, ipAddress } = loginDto;
-    let user;
+    let user: any;
 
     if (email) {
       user = await this.userService.findByEmail(email);
@@ -59,6 +59,8 @@ export class AuthService {
       );
     }
 
+    user = user.toObject();
+
     const { password: _, ...result } = user;
     return result;
   }
@@ -81,6 +83,13 @@ export class AuthService {
     const userData = await this.validateUser(loginDto);
     const payload = { username: userData.username, sub: userData._id };
     const accessToken = this.jwtService.sign(payload);
-    return { access_token: accessToken };
+    return {
+      access_token: accessToken,
+      id: userData._id,
+      fullName: userData.fullName,
+      email: userData.email,
+      phoneNumber: userData.phoneNumber,
+      profileImageUrl: userData.profileImageURL,
+    };
   }
 }

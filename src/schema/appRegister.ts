@@ -8,7 +8,7 @@ export class AppUsers extends Document {
   @Prop()
   email: string;
   @Prop()
-  phoneNumber: number;
+  phoneNumber: string;
   @Prop()
   password: string;
   @Prop()

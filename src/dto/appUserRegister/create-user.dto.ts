@@ -27,9 +27,9 @@ export class CreateAppUserDto {
     example: '503134473',
     description: 'Phone number (typeof Number)',
   })
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  readonly phoneNumber: number;
+  readonly phoneNumber: string;
 
   @ApiProperty({
     example: 'password123',

@@ -15,7 +15,7 @@ import { LocalAuthGuard } from '../../local-auth.guard';
 import { AdminService } from '../../services/admin/admin.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 
-@ApiTags('admin (Register)')
+@ApiTags('Admin (Register)')
 @Controller('admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}

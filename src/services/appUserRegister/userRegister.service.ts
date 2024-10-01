@@ -108,7 +108,7 @@ export class AppUserService {
 
     await this.otpModel.create({
       email: createAppUserDto.email,
-      phoneNumber: createAppUserDto.phoneNumber.toString(), // Store phone number as string
+      phoneNumber: createAppUserDto.phoneNumber,
       otpCode: otp,
       expiresAt,
     });

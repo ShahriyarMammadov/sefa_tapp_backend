@@ -2,18 +2,18 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
-export class ContactUs extends Document {
+export class Blog extends Document {
   @Prop({ required: true })
   name: string;
 
   @Prop({ required: true })
-  phoneNumber: number;
+  description: string;
 
   @Prop({ required: true })
-  email: string;
+  imageURL: string;
 
-  @Prop({ required: true })
-  message: string;
+  @Prop({ required: false, default: 'Admin' })
+  createdWith: string;
 }
 
-export const ContactUsSchema = SchemaFactory.createForClass(ContactUs);
+export const BlogSchema = SchemaFactory.createForClass(Blog);

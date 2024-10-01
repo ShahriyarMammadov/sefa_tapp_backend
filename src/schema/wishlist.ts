@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
-@Schema()
+@Schema({ timestamps: true })
 export class Wishlist extends Document {
   @Prop({ type: Types.ObjectId, ref: 'Admin', required: true })
   userID: Types.ObjectId;

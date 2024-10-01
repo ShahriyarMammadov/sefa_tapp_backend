@@ -10,7 +10,7 @@ export class AuthController {
 
   // @UseGuards(LocalAuthGuard)
   @Post('admin/login') // Admin login endpoint
-  @ApiTags('auth')
+  @ApiTags('Auth')
   @ApiOperation({ summary: 'Admin Login' })
   @ApiResponse({ status: 201, description: 'Create access_token for admin' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
@@ -24,7 +24,7 @@ export class AuthController {
   }
 
   @Post('user/login') // User login endpoint
-  @ApiTags('auth')
+  @ApiTags('Auth')
   @ApiOperation({ summary: 'User Login' })
   @ApiResponse({ status: 201, description: 'Create access_token for user' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
