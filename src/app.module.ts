@@ -11,6 +11,7 @@ import { ClinicsModule } from './modules/clinics.module';
 import { MedicineModule } from './modules/medicine.module';
 import { WishlistModule } from './modules/wishlist.module';
 import { AppRegisterModule } from './modules/appRegister.module';
+import { ContactUsModule } from './modules/contactUs.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { AppRegisterModule } from './modules/appRegister.module';
     ClinicsModule,
     MedicineModule,
     WishlistModule,
-    AppRegisterModule
+    AppRegisterModule,
+    ContactUsModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailService],
