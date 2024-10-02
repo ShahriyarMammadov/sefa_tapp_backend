@@ -7,15 +7,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
 import { Wishlist } from '../../schema/wishlist';
 import { WishlistDto } from '../../dto/wishlist/create-wishlist.dto';
-import { Admin } from '../../schema/admin';
 import { Medicine } from '../../schema/medicine';
 import { Clinics } from '../../schema/clinics';
+import { AppUsers } from 'src/schema/appRegister';
 
 @Injectable()
 export class WishlistService {
   constructor(
     @InjectModel(Wishlist.name) private readonly wishlistModel: Model<Wishlist>,
-    @InjectModel(Admin.name) private readonly userModel: Model<Admin>,
+    @InjectModel(AppUsers.name) private readonly userModel: Model<AppUsers>,
     @InjectModel(Medicine.name) private readonly medicineModel: Model<Medicine>,
     @InjectModel(Clinics.name) private readonly clinicModel: Model<Clinics>,
   ) {}
