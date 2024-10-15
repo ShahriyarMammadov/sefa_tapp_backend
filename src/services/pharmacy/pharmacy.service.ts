@@ -71,9 +71,18 @@ export class PharmacyService {
   }
 
   async addComment(id: string, commentDto: CommentDto): Promise<Pharmacy> {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException(`Invalid ID format.`);
+    }
+
     const pharmacy = await this.PharmacyModel.findById(id);
+
     if (!pharmacy) {
       throw new NotFoundException(`Pharmacy with ID ${id} not found`);
+    }
+
+    if (!isValidObjectId(commentDto.userId)) {
+      throw new BadRequestException(`Invalid user ID format.`);
     }
 
     const user = await this.userModel.findById(commentDto.userId);
