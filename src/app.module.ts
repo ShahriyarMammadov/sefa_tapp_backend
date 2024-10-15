@@ -13,6 +13,7 @@ import { WishlistModule } from './modules/wishlist.module';
 import { AppRegisterModule } from './modules/appRegister.module';
 import { ContactUsModule } from './modules/contactUs.module';
 import { BlogModule } from './modules/blog.module';
+import { PharmacyModule } from './modules/pharmacy.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { BlogModule } from './modules/blog.module';
     AppRegisterModule,
     ContactUsModule,
     BlogModule,
+    PharmacyModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailService],

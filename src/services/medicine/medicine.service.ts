@@ -1,6 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { isValidObjectId, Model } from 'mongoose';
 import { Medicine } from 'src/schema/medicine';
 import { CreateMedicineDto } from 'src/dto/medicine/create-medicine.dto';
 import { UpdateMedicineDto } from 'src/dto/medicine/update-medicine.dto';
@@ -21,6 +25,10 @@ export class MedicineService {
   }
 
   async findOne(id: string): Promise<Medicine> {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException(`Invalid ID format.`);
+    }
+
     const medicine = await this.MedicineModel.findById(id).exec();
     if (!medicine) {
       throw new NotFoundException(`Medicine with ID "${id}" not found`);
@@ -32,6 +40,10 @@ export class MedicineService {
     id: string,
     UpdateMedicineDto: UpdateMedicineDto,
   ): Promise<Medicine> {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException(`Invalid ID format.`);
+    }
+
     const updateMedicine = await this.MedicineModel.findByIdAndUpdate(
       id,
       UpdateMedicineDto,
@@ -44,6 +56,10 @@ export class MedicineService {
   }
 
   async remove(id: string): Promise<void> {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException(`Invalid ID format.`);
+    }
+
     const result = await this.MedicineModel.findByIdAndDelete(id).exec();
     if (!result) {
       throw new NotFoundException(`Medicine with ID "${id}" not found`);
