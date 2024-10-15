@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
-import { Pharmacy } from 'src/schema/pharmacy';
+import { Comment, Pharmacy } from 'src/schema/pharmacy';
 import {
   CommentDto,
   CreatePharmacyDto,
@@ -37,6 +37,36 @@ export class PharmacyService {
     if (!pharmacy) {
       throw new NotFoundException(`Pharmacy with ID "${id}" not found`);
     }
+
+    const userIds = pharmacy.comments.map((comment) => comment.userId);
+
+    const users: AppUsers[] = await this.userModel
+      .find({ _id: { $in: userIds } })
+      .exec();
+
+    const userMap = {};
+    users.forEach((user) => {
+      userMap[user._id.toString()] = user;
+    });
+
+    const commentsWithUserDetails = pharmacy.comments.map((comment) => {
+      const user = userMap[comment.userId.toString()] || null;
+      return {
+        ...comment,
+        user: user
+          ? {
+              fullName: user.fullName,
+              email: user.email,
+              phoneNumber: user.phoneNumber,
+              profileImageURL: user.profileImageURL,
+              isActive: user.isActive,
+            }
+          : null,
+      };
+    });
+
+    pharmacy.comments = commentsWithUserDetails;
+
     return pharmacy;
   }
 
