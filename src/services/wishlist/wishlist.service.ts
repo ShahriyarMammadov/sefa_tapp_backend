@@ -10,6 +10,7 @@ import { WishlistDto } from '../../dto/wishlist/create-wishlist.dto';
 import { Medicine } from '../../schema/medicine';
 import { Clinics } from '../../schema/clinics';
 import { AppUsers } from 'src/schema/appRegister';
+import { Pharmacy } from 'src/schema/pharmacy';
 
 @Injectable()
 export class WishlistService {
@@ -18,10 +19,11 @@ export class WishlistService {
     @InjectModel(AppUsers.name) private readonly userModel: Model<AppUsers>,
     @InjectModel(Medicine.name) private readonly medicineModel: Model<Medicine>,
     @InjectModel(Clinics.name) private readonly clinicModel: Model<Clinics>,
+    @InjectModel(Pharmacy.name) private readonly pharmacyModel: Model<Pharmacy>,
   ) {}
 
   async createWishlist(wishlistDto: WishlistDto): Promise<Wishlist> {
-    const { userID, medicineID, clinicID } = wishlistDto;
+    const { userID, medicineID, clinicID, pharmacyID } = wishlistDto;
 
     // Validate if userID is a valid MongoDB ObjectId
     if (!isValidObjectId(userID)) {
@@ -35,9 +37,9 @@ export class WishlistService {
     }
 
     // Ensure at least one of medicineID or clinicID is provided
-    if (!medicineID && !clinicID) {
+    if (!medicineID && !clinicID && !pharmacyID) {
       throw new BadRequestException(
-        'Either medicineID or clinicID must be provided.',
+        'Either medicineID, clinicID or pharmacyID must be provided.',
       );
     }
 
@@ -68,6 +70,20 @@ export class WishlistService {
       }
     }
 
+    if (pharmacyID) {
+      if (!isValidObjectId(pharmacyID)) {
+        throw new BadRequestException(`Invalid Pharmacy ID format.`);
+      }
+
+      const pharmacyExists = await this.checkPharmacyExists(pharmacyID);
+
+      if (!pharmacyExists) {
+        throw new NotFoundException(
+          `Pharmacy with ID ${pharmacyID} not found.`,
+        );
+      }
+    }
+
     // Create and save the wishlist
     const wishlist = new this.wishlistModel(wishlistDto);
     return wishlist.save();
@@ -82,6 +98,7 @@ export class WishlistService {
       .find({ userID: userID })
       .populate('medicineID')
       .populate('clinicID')
+      .populate('pharmacyID')
       .exec();
 
     if (!wishlists || wishlists.length === 0) {
@@ -113,6 +130,11 @@ export class WishlistService {
 
   private async checkClinicExists(clinicID: string): Promise<boolean> {
     const clinic = await this.clinicModel.findById(clinicID).exec();
+    return !!clinic;
+  }
+
+  private async checkPharmacyExists(pharmacyID: string): Promise<boolean> {
+    const clinic = await this.pharmacyModel.findById(pharmacyID).exec();
     return !!clinic;
   }
 }

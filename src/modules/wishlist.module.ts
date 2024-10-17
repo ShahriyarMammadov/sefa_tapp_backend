@@ -9,6 +9,8 @@ import { ClinicsModule } from './clinics.module';
 import { Medicine, MedicineSchema } from 'src/schema/medicine';
 import { Clinics, ClinicsSchema } from 'src/schema/clinics';
 import { AppUsers, AppUsersSchema } from 'src/schema/appRegister';
+import { PharmacyModule } from './pharmacy.module';
+import { Pharmacy, PharmacySchema } from 'src/schema/pharmacy';
 
 @Module({
   imports: [
@@ -17,10 +19,12 @@ import { AppUsers, AppUsersSchema } from 'src/schema/appRegister';
       { name: AppUsers.name, schema: AppUsersSchema },
       { name: Medicine.name, schema: MedicineSchema },
       { name: Clinics.name, schema: ClinicsSchema },
+      { name: Pharmacy.name, schema: PharmacySchema },
     ]),
     AdminModule,
     MedicineModule,
     ClinicsModule,
+    PharmacyModule,
   ],
   controllers: [WishlistController],
   providers: [WishlistService],

@@ -27,4 +27,13 @@ export class WishlistDto {
   @IsString()
   @IsOptional()
   readonly clinicID?: string;
+
+  @ApiProperty({
+    example: null,
+    description: 'Pharmacy ID',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  readonly pharmacyID?: string;
 }
