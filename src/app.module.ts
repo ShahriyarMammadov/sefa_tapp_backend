@@ -14,6 +14,10 @@ import { AppRegisterModule } from './modules/appRegister.module';
 import { ContactUsModule } from './modules/contactUs.module';
 import { BlogModule } from './modules/blog.module';
 import { PharmacyModule } from './modules/pharmacy.module';
+// import { ChatModule } from './modules/liveChat.module';
+import { ErrorLogModule } from './modules/errorLog/errorLog.module';
+import { RequestResponseModule } from './modules/errorLog/request-response.module';
+import { CleanupModule } from './modules/errorLog/clearJob.module';
 
 @Module({
   imports: [
@@ -33,6 +37,10 @@ import { PharmacyModule } from './modules/pharmacy.module';
     ContactUsModule,
     BlogModule,
     PharmacyModule,
+    // ChatModule
+    ErrorLogModule,
+    RequestResponseModule,
+    CleanupModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailService],
