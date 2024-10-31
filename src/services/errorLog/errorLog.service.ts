@@ -19,11 +19,23 @@ export class ErrorLogService {
     return this.errorLogModel.find().exec();
   }
 
-  async filterByDate(startDate: Date, endDate: Date): Promise<ErrorLog[]> {
-    return this.errorLogModel
-      .find({
-        createdAt: { $gte: startDate, $lte: endDate },
-      })
-      .exec();
+  async filterByDate(startDate: string, endDate: string): Promise<ErrorLog[]> {
+    try {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+        throw new Error('error time format');
+      }
+
+      return this.errorLogModel
+        .find({
+          createdAt: { $gte: start, $lte: end },
+        })
+        .exec();
+    } catch (error) {
+      console.error('Error filtering by date:', error);
+      throw new Error('Filter by date failed');
+    }
   }
 }
