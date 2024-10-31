@@ -21,10 +21,7 @@ export class ErrorLogController {
   async filterByDate(
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,
-  ): Promise<ErrorLog[]> {
-    return this.errorLogService.filterByDate(
-      new Date(startDate),
-      new Date(endDate),
-    );
+  ) {
+    return this.errorLogService.filterByDate(startDate, endDate);
   }
 }
