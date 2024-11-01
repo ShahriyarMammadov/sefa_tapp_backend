@@ -55,11 +55,10 @@ export class PharmacyService {
         ...comment,
         user: user
           ? {
-              fullName: user.fullName,
-              email: user.email,
-              phoneNumber: user.phoneNumber,
-              profileImageURL: user.profileImageURL,
-              isActive: user.isActive,
+              fullName: user?.fullName,
+              email: user?.email,
+              phoneNumber: user?.phoneNumber,
+              profileImageURL: user?.profileImageURL,
             }
           : null,
       };
@@ -134,5 +133,42 @@ export class PharmacyService {
 
     pharmacy.comments.push(newComment);
     return pharmacy.save();
+  }
+
+  async getCommentByPharmacyId(id: string): Promise<PopulatedComment[]> {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException(`Invalid ID format.`);
+    }
+
+    const pharmacy = await this.PharmacyModel.findById(id).lean();
+
+    if (!pharmacy) {
+      throw new NotFoundException(`Pharmacy with ID ${id} not found`);
+    }
+
+    const userIds = pharmacy.comments.map((comment) => comment.userId);
+
+    const users: AppUsers[] = await this.userModel
+      .find({ _id: { $in: userIds } })
+      .exec();
+
+    const userMap = {};
+    users.forEach((user) => {
+      userMap[user._id.toString()] = user;
+    });
+
+    const commentsWithUserDetails = pharmacy.comments.map((comment) => {
+      const user = userMap[comment.userId.toString()] || null;
+
+      return {
+        ...comment,
+        fullName: user?.fullName,
+        email: user?.email,
+        phoneNumber: user?.phoneNumber,
+        profileImageURL: user?.profileImageURL,
+      };
+    });
+
+    return commentsWithUserDetails;
   }
 }

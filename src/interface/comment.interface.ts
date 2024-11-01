@@ -1,6 +1,9 @@
-interface PopulatedComment extends Comment {
-  userFullName: string;
-  userEmail: string;
-  userPhoneNumber: string;
-  userProfileImageURL: string | null;
+interface PopulatedComment {
+  userId: string;
+  comment: string;
+  date: Date;
+  fullName?: string;
+  email?: string;
+  phoneNumber?: string;
+  profileImageURL?: string | null;
 }

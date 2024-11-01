@@ -16,6 +16,7 @@ import { CreateAppUserDto } from '../../dto/appUserRegister/create-user.dto';
 import { UpdateAppUserDto } from '../../dto/appUserRegister/update-user-dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { VerifyOtpDto } from 'src/dto/verifyOTP.dto';
+import { AppUserWithComments } from 'src/services/appUserRegister/userRegister.service';
 
 @ApiTags('App (Register)')
 @Controller('appUsers')
@@ -69,6 +70,13 @@ export class AppUserController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.appUserService.findOne(id);
+  }
+
+  @Get(':id/comments')
+  async commentsByUserId(
+    @Param('id') id: string,
+  ): Promise<AppUserWithComments> {
+    return this.appUserService.commentsByUserId(id);
   }
 
   @Patch(':id')

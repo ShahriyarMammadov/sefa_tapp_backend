@@ -12,6 +12,16 @@ import { EmailService } from '../email/send-email.service';
 import { Otp } from 'src/schema/otp';
 import * as nodemailer from 'nodemailer';
 import * as bcrypt from 'bcrypt';
+import { Pharmacy } from 'src/schema/pharmacy';
+
+interface Comment {
+  comment: string;
+  createdAt: Date;
+}
+
+export interface AppUserWithComments extends AppUsers {
+  comments: Comment[];
+}
 
 @Injectable()
 export class AppUserService {
@@ -20,6 +30,7 @@ export class AppUserService {
   constructor(
     @InjectModel(AppUsers.name) private readonly appUserModel: Model<AppUsers>,
     @InjectModel(Otp.name) private readonly otpModel: Model<Otp>,
+    @InjectModel(Pharmacy.name) private readonly pharmacyModel: Model<Pharmacy>,
     private readonly emailService: EmailService,
   ) {
     this.transporter = nodemailer.createTransport({
@@ -84,11 +95,6 @@ export class AppUserService {
       }
     }
 
-    // const { repeatPassword, ...userData } = createAppUserDto;
-
-    // Hash the password before saving
-    // const hashedPassword = await this.hashPassword(createAppUserDto.password);
-
     const hashedPassword = await bcrypt.hash(
       createAppUserDto.password,
       this.saltOrRounds,
@@ -100,6 +106,7 @@ export class AppUserService {
     const newUser = new this.appUserModel({
       ...createAppUserDto,
       password: hashedPassword,
+      repeatPassword: hashedPassword,
       otp,
       isActive: false,
     });
@@ -164,6 +171,29 @@ export class AppUserService {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
     return user;
+  }
+
+  async commentsByUserId(id: string): Promise<AppUserWithComments> {
+    const user = await this.appUserModel.findById(id).lean().exec();
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    const pharmacyComments = await this.pharmacyModel
+      .find({ 'comments.userId': id })
+      .select('comments')
+      .lean()
+      .exec();
+
+    const pharmacyUserComments: Comment[] = pharmacyComments.flatMap((doc) =>
+      (doc.comments || []).map((comment: any) => ({
+        comment: comment.comment,
+        createdAt: comment.date,
+      })),
+    );
+
+    return { ...user, comments: pharmacyUserComments } as AppUserWithComments;
   }
 
   async update(

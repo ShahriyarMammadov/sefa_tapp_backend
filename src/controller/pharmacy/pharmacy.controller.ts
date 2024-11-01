@@ -14,6 +14,7 @@ import {
   CreatePharmacyDto,
 } from 'src/dto/pharmacy/create-pharmacy.dto';
 import { Pharmacy } from 'src/schema/pharmacy';
+import { Comment } from 'src/schema/pharmacy';
 
 @ApiTags('Pharmacy')
 @Controller('pharmacy')
@@ -59,5 +60,11 @@ export class PharmacyController {
   @ApiOperation({ summary: 'Add comment to Pharmacy' })
   async addComment(@Param('id') id: string, @Body() commentDto: CommentDto) {
     return this.pharmacyService.addComment(id, commentDto);
+  }
+
+  @Get(':id/comments')
+  @ApiOperation({ summary: 'Get comments by Pharmacy ID' })
+  async getCommentByPharmacyId(@Param('id') id: string): Promise<Comment[]> {
+    return this.pharmacyService.getCommentByPharmacyId(id);
   }
 }

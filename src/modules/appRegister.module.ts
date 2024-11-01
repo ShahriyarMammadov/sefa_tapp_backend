@@ -5,6 +5,7 @@ import { AppUsers, AppUsersSchema } from 'src/schema/appRegister';
 import { Otp, OtpSchema } from 'src/schema/otp';
 import { AppUserService } from 'src/services/appUserRegister/userRegister.service';
 import { EmailService } from 'src/services/email/send-email.service';
+import { PharmacyModule } from 'src/modules/pharmacy.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { EmailService } from 'src/services/email/send-email.service';
       { name: AppUsers.name, schema: AppUsersSchema },
       { name: Otp.name, schema: OtpSchema },
     ]),
+    PharmacyModule,
   ],
   controllers: [AppUserController],
   providers: [AppUserService, EmailService],
