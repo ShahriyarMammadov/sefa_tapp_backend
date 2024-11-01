@@ -1,5 +1,5 @@
 export class CreateErrorLogDto {
-  readonly message: string;
+  readonly message: Record<string, any>;
   readonly stack?: string;
   readonly statusCode?: number;
   readonly method?: string;

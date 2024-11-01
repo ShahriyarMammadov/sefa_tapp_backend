@@ -3,8 +3,8 @@ import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class ErrorLog extends Document {
-  @Prop({ required: true })
-  message: string;
+  @Prop({ required: true, type: Object })
+  message: Record<string, any>;
 
   @Prop()
   stack: string;
