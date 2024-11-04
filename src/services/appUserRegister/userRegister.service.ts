@@ -61,7 +61,21 @@ export class AppUserService {
       from: 'shahriyarmammadov16@gmail.com',
       to,
       subject: 'Şəfa Tapp tətbiqinə xoş gəlmisiniz.',
-      text: `Təsdiq kodunuz: ${otp}`,
+      html: `
+      <div style="font-family: Arial, sans-serif; color: #333;">
+        <h2 style="color: #4CAF50;">Şəfa Tapp tətbiqinə xoş gəlmisiniz!</h2>
+        <p>Hörmətli istifadəçi,</p>
+        <p>Tətbiqimizə giriş üçün təsdiq kodunuz aşağıdadır:</p>
+        <div style="font-size: 24px; font-weight: bold; color: #4CAF50; padding: 10px; background-color: #f4f4f4; text-align: center; border-radius: 5px;">
+          ${otp}
+        </div>
+        <p style="font-weight: bold;">Lütfən, bu kodu heç kimlə paylaşmayın.</p>
+        <br>
+        <img src="https://firebasestorage.googleapis.com/v0/b/elektra-az.appspot.com/o/images%2Fsefatapp.png?alt=media&token=9a6749e1-4e98-468f-a8f0-097bf43dd192" alt="Logo" style="width: 150px; height: auto;">
+        <p>Əgər əlavə sualınız varsa, bizimlə əlaqə saxlamaqdan çəkinməyin.</p>
+        <p style="font-weight: bold;>Ən xoş arzularla,<br>Şəfa Tapp Komandası</p>
+      </div>
+    `,
     };
     await this.transporter.sendMail(mailOptions);
   }

@@ -15,12 +15,12 @@ export class EmailService {
     });
   }
 
-  async sendEmail(to: string, subject: string, text: string): Promise<void> {
+  async sendEmail(to: string, subject: string, html: string): Promise<void> {
     const mailOptions = {
       from: 'shahriyarmammadov16@gmail.com',
       to,
       subject,
-      text,
+      html,
     };
 
     await this.transporter.sendMail(mailOptions);

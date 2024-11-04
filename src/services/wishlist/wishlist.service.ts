@@ -32,8 +32,13 @@ export class WishlistService {
 
     // Check if user exists
     const user = await this.userModel.findById(userID);
+
     if (!user) {
       throw new NotFoundException(`User with ID ${userID} not found.`);
+    }
+
+    if (!user?.isActive) {
+      throw new BadRequestException(`User is not active.`);
     }
 
     // Ensure at least one of medicineID or clinicID is provided

@@ -54,8 +54,22 @@ export class AuthService {
     if (user.ipAddress !== ipAddress) {
       await this.emailService.sendEmail(
         user.email,
-        'New Login Detected from Different IP Address',
-        `${ipAddress}`,
+        'Fərqli IP Ünvanından Yeni Giriş Aşkarlanıb',
+        `
+        <div style="font-family: Arial, sans-serif; color: #333;">
+          <h2 style="color: #4CAF50;">Fərqli İP ünvanı</h2>
+          <p>Hörmətli istifadəçi,</p>
+          <p>Hesabınıza fərqli bir IP ünvanından giriş aşkarlanıb:</p>
+          <div style="font-size: 24px; font-weight: bold; color: #4CAF50; padding: 10px; background-color: #f4f4f4; text-align: center; border-radius: 5px;">
+            ${ipAddress}
+          </div>
+          <p>Əgər bu girişi siz etməmisinizsə, hesabınızı qorumaq üçün şifrənizi dəyişməyiniz tövsiyə olunur.</p>
+          <br>
+          <img src="https://firebasestorage.googleapis.com/v0/b/elektra-az.appspot.com/o/images%2Fsefatapp.png?alt=media&token=9a6749e1-4e98-468f-a8f0-097bf43dd192" alt="Logo" style="width: 150px; height: auto;">
+          <p>Əlavə suallarınız varsa, bizimlə əlaqə saxlamaqdan çəkinməyin.</p>
+          <p>Ən xoş arzularla,<br>Şəfa Tapp Komandası</p>
+        </div>
+        `,
       );
     }
 
