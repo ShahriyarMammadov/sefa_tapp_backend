@@ -3,16 +3,16 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { CreateAppUserDto } from '../../dto/appUserRegister/create-user.dto';
-import { UpdateAppUserDto } from '../../dto/appUserRegister/update-user-dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AppUsers } from '../../schema/appRegister';
+import { AppUsers } from '../../schema/users';
 import { EmailService } from '../email/send-email.service';
 import { Otp } from 'src/schema/otp';
 import * as nodemailer from 'nodemailer';
 import * as bcrypt from 'bcrypt';
 import { Pharmacy } from 'src/schema/pharmacy';
+import { CreateUserDto } from 'src/dto/users/create-user.dto';
+import { UpdateUserDto } from 'src/dto/users/update-user-dto';
 
 interface Comment {
   comment: string;
@@ -81,9 +81,9 @@ export class AppUserService {
   }
 
   // Register user with OTP
-  async registerUser(createAppUserDto: CreateAppUserDto): Promise<AppUsers> {
+  async registerUser(CreateUserDto: CreateUserDto): Promise<AppUsers> {
     const existingUser = await this.appUserModel
-      .findOne({ email: createAppUserDto.email })
+      .findOne({ email: CreateUserDto.email })
       .exec();
 
     if (existingUser) {
@@ -97,20 +97,20 @@ export class AppUserService {
 
         await this.otpModel.findOneAndUpdate(
           {
-            email: createAppUserDto.email,
-            phoneNumber: createAppUserDto.phoneNumber,
+            email: CreateUserDto.email,
+            phoneNumber: CreateUserDto.phoneNumber,
           },
           { otpCode: otp, expiresAt },
           { upsert: true },
         );
 
-        await this.sendOtpEmail(createAppUserDto.email, otp);
+        await this.sendOtpEmail(CreateUserDto.email, otp);
         return existingUser;
       }
     }
 
     const hashedPassword = await bcrypt.hash(
-      createAppUserDto.password,
+      CreateUserDto.password,
       this.saltOrRounds,
     );
 
@@ -118,7 +118,7 @@ export class AppUserService {
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // OTP expires in 15 minutes
 
     const newUser = new this.appUserModel({
-      ...createAppUserDto,
+      ...CreateUserDto,
       password: hashedPassword,
       repeatPassword: hashedPassword,
       otp,
@@ -128,13 +128,13 @@ export class AppUserService {
     await newUser.save();
 
     await this.otpModel.create({
-      email: createAppUserDto.email,
-      phoneNumber: createAppUserDto.phoneNumber,
+      email: CreateUserDto.email,
+      phoneNumber: CreateUserDto.phoneNumber,
       otpCode: otp,
       expiresAt,
     });
 
-    await this.sendOtpEmail(createAppUserDto.email, otp);
+    await this.sendOtpEmail(CreateUserDto.email, otp);
     return newUser;
   }
 
@@ -210,12 +210,9 @@ export class AppUserService {
     return { ...user, comments: pharmacyUserComments } as AppUserWithComments;
   }
 
-  async update(
-    id: string,
-    updateAppUserDto: UpdateAppUserDto,
-  ): Promise<AppUsers> {
+  async update(id: string, UpdateUserDto: UpdateUserDto): Promise<AppUsers> {
     const updatedUser = await this.appUserModel
-      .findByIdAndUpdate(id, updateAppUserDto, { new: true })
+      .findByIdAndUpdate(id, UpdateUserDto, { new: true })
       .exec();
     if (!updatedUser) {
       throw new NotFoundException(`User with ID ${id} not found`);

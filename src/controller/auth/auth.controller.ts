@@ -1,6 +1,6 @@
 import { Controller, Request, Post, UseGuards, Body } from '@nestjs/common';
 import { AuthService } from '../../services/auth/auth.service';
-import { LocalAuthGuard } from '../../local-auth.guard';
+// import { LocalAuthGuard } from '../../local-auth.guard';
 import { LoginDto } from '../../dto/login/login.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -19,10 +19,9 @@ export class AuthController {
     description: 'Username or password is incorrect',
   })
   @ApiBody({ type: LoginDto })
-  async adminLogin(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto); // Admin login logic
-  }
-
+  // async adminLogin(@Body() loginDto: LoginDto) {
+  //   return this.authService.login(loginDto); // Admin login logic
+  // }
   @Post('user/login') // User login endpoint
   @ApiTags('Auth')
   @ApiOperation({ summary: 'User Login' })
@@ -36,7 +35,6 @@ export class AuthController {
   async userLogin(@Request() req, @Body() loginDto: LoginDto) {
     let ipAddress: string;
 
-    // X-Forwarded-For başlığını kontrol edin, veya varsayılan IP alma yöntemine geri dönün
     const forwarded = req.headers['x-forwarded-for'];
     if (forwarded) {
       ipAddress = forwarded.split(',')[0].trim();
@@ -44,7 +42,6 @@ export class AuthController {
       ipAddress = req.ip || req.connection.remoteAddress;
     }
 
-    // DTO'ya gerçek IP adresini ekleyin
     loginDto.ipAddress = ipAddress;
 
     return this.authService.loginUser(loginDto); // User login logic

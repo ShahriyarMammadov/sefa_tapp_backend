@@ -11,16 +11,16 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { AppUserService } from '../../services/appUserRegister/userRegister.service';
-import { CreateAppUserDto } from '../../dto/appUserRegister/create-user.dto';
-import { UpdateAppUserDto } from '../../dto/appUserRegister/update-user-dto';
+import { AppUserService } from '../../services/user/userRegister.service';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { VerifyOtpDto } from 'src/dto/verifyOTP.dto';
-import { AppUserWithComments } from 'src/services/appUserRegister/userRegister.service';
+import { AppUserWithComments } from 'src/services/user/userRegister.service';
+import { CreateUserDto } from 'src/dto/users/create-user.dto';
+import { UpdateUserDto } from 'src/dto/users/update-user-dto';
 
-@ApiTags('App (Register)')
-@Controller('appUsers')
-export class AppUserController {
+@ApiTags('Register')
+@Controller('User')
+export class UserController {
   constructor(private readonly appUserService: AppUserService) {}
 
   @Post('verify-otp')
@@ -53,8 +53,8 @@ export class AppUserController {
   }
 
   @Post('register')
-  async registerUser(@Body() createAppUserDto: CreateAppUserDto) {
-    return this.appUserService.registerUser(createAppUserDto);
+  async registerUser(@Body() CreateUserDto: CreateUserDto) {
+    return this.appUserService.registerUser(CreateUserDto);
   }
 
   // Get all users based on isActive status
@@ -80,8 +80,8 @@ export class AppUserController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAppUserDto: UpdateAppUserDto) {
-    return this.appUserService.update(id, updateAppUserDto);
+  update(@Param('id') id: string, @Body() UpdateUserDto: UpdateUserDto) {
+    return this.appUserService.update(id, UpdateUserDto);
   }
 
   @Delete(':id')

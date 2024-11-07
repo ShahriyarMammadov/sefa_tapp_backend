@@ -2,13 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsString,
-  IsNumber,
+  IsOptional,
   MinLength,
   Matches,
   IsEmail,
 } from 'class-validator';
 
-export class UpdateAppUserDto {
+export class CreateUserDto {
   @ApiProperty({ example: 'Shahriyar Mammadov', description: 'Full name' })
   @IsString()
   @IsNotEmpty()
@@ -18,8 +18,8 @@ export class UpdateAppUserDto {
     example: 'shahriyarmammadov16@gmail.com',
     description: 'E-mail',
   })
-  @IsEmail({}, { message: 'Invalid email address' })
   @IsNotEmpty()
+  @IsEmail({}, { message: 'Invalid email address' })
   readonly email: string;
 
   @ApiProperty({
@@ -71,6 +71,6 @@ export class UpdateAppUserDto {
     description: 'https://api.dicebear.com/7.x/miniavs/svg?seed=1',
   })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   readonly profileImageURL: string;
 }

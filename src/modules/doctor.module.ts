@@ -10,6 +10,6 @@ import { Doctor, DoctorSchema } from '../schema/doctor';
   ],
   controllers: [DoctorController],
   providers: [DoctorService],
-  exports: [MongooseModule],
+  exports: [MongooseModule, DoctorService],
 })
 export class DoctorModule {}

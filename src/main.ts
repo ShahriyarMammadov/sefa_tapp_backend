@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as morgan from 'morgan';
 import { ValidationPipe } from '@nestjs/common';
-import * as express from 'express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
@@ -10,8 +9,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.use(morgan('dev'));
-
-  app.use('/uploads', express.static('uploads'));
 
   app.enableCors();
 

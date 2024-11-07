@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AdminModule } from './modules/admin.module';
 import { AuthModule } from './modules/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { EmailService } from './services/email/send-email.service';
@@ -10,14 +9,14 @@ import { DoctorModule } from './modules/doctor.module';
 import { ClinicsModule } from './modules/clinics.module';
 import { MedicineModule } from './modules/medicine.module';
 import { WishlistModule } from './modules/wishlist.module';
-import { AppRegisterModule } from './modules/appRegister.module';
+import { AppRegisterModule } from './modules/register.module';
 import { ContactUsModule } from './modules/contactUs.module';
 import { BlogModule } from './modules/blog.module';
 import { PharmacyModule } from './modules/pharmacy.module';
-// import { ChatModule } from './modules/liveChat.module';
 import { ErrorLogModule } from './modules/errorLog/errorLog.module';
 import { RequestResponseModule } from './modules/errorLog/request-response.module';
 import { CleanupModule } from './modules/errorLog/clearJob.module';
+import { CommentModule } from './modules/comment.module';
 
 @Module({
   imports: [
@@ -27,7 +26,6 @@ import { CleanupModule } from './modules/errorLog/clearJob.module';
     MulterModule.register({
       dest: './uploads',
     }),
-    AdminModule,
     AuthModule,
     DoctorModule,
     ClinicsModule,
@@ -37,10 +35,10 @@ import { CleanupModule } from './modules/errorLog/clearJob.module';
     ContactUsModule,
     BlogModule,
     PharmacyModule,
-    // ChatModule
     ErrorLogModule,
     RequestResponseModule,
     CleanupModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailService],

@@ -1,22 +1,22 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppUserController } from 'src/controller/appUserRegister/appUser.controller';
-import { AppUsers, AppUsersSchema } from 'src/schema/appRegister';
+import { UserController } from 'src/controller/users/users.controller';
+import { AppUsers, userSchema } from 'src/schema/users';
 import { Otp, OtpSchema } from 'src/schema/otp';
-import { AppUserService } from 'src/services/appUserRegister/userRegister.service';
+import { AppUserService } from 'src/services/user/userRegister.service';
 import { EmailService } from 'src/services/email/send-email.service';
 import { PharmacyModule } from 'src/modules/pharmacy.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: AppUsers.name, schema: AppUsersSchema },
+      { name: AppUsers.name, schema: userSchema },
       { name: Otp.name, schema: OtpSchema },
     ]),
     PharmacyModule,
   ],
-  controllers: [AppUserController],
+  controllers: [UserController],
   providers: [AppUserService, EmailService],
-  exports: [MongooseModule],
+  exports: [MongooseModule, AppUserService],
 })
 export class AppRegisterModule {}

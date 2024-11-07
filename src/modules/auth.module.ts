@@ -4,14 +4,14 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthService } from '../services/auth/auth.service';
 import { JwtStrategy } from '../jwt.strategy';
 import { LocalStrategy } from '../local.strategy';
-import { AdminModule } from './admin.module';
+// import { AdminModule } from './admin.module';
 import { AuthController } from '../controller/auth/auth.controller';
 import { EmailService } from 'src/services/email/send-email.service';
 import { UsersModule } from './user.module';
 
 @Module({
   imports: [
-    AdminModule,
+    // AdminModule,
     PassportModule,
     UsersModule,
     JwtModule.register({

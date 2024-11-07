@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { PharmacyController } from 'src/controller/pharmacy/pharmacy.controller';
 import { Comment, Pharmacy, PharmacySchema } from 'src/schema/pharmacy';
 import { PharmacyService } from 'src/services/pharmacy/pharmacy.service';
-import { AppUsers } from 'src/schema/appRegister';
+import { AppUsers } from 'src/schema/users';
 
 @Module({
   imports: [
@@ -14,6 +14,6 @@ import { AppUsers } from 'src/schema/appRegister';
   ],
   controllers: [PharmacyController],
   providers: [PharmacyService],
-  exports: [MongooseModule],
+  exports: [MongooseModule, PharmacyService],
 })
 export class PharmacyModule {}

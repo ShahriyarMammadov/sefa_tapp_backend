@@ -10,7 +10,7 @@ import {
   CommentDto,
   CreatePharmacyDto,
 } from 'src/dto/pharmacy/create-pharmacy.dto';
-import { AppUsers } from 'src/schema/appRegister';
+import { AppUsers } from 'src/schema/users';
 
 @Injectable()
 export class PharmacyService {

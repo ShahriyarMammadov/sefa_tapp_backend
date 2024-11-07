@@ -9,7 +9,7 @@ import { Wishlist } from '../../schema/wishlist';
 import { WishlistDto } from '../../dto/wishlist/create-wishlist.dto';
 import { Medicine } from '../../schema/medicine';
 import { Clinics } from '../../schema/clinics';
-import { AppUsers } from 'src/schema/appRegister';
+import { AppUsers } from 'src/schema/users';
 import { Pharmacy } from 'src/schema/pharmacy';
 
 @Injectable()
