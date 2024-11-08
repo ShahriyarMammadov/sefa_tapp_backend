@@ -14,9 +14,9 @@ import { ContactUsModule } from './modules/contactUs.module';
 import { BlogModule } from './modules/blog.module';
 import { PharmacyModule } from './modules/pharmacy.module';
 import { ErrorLogModule } from './modules/errorLog/errorLog.module';
-import { RequestResponseModule } from './modules/errorLog/request-response.module';
 import { CleanupModule } from './modules/errorLog/clearJob.module';
 import { CommentModule } from './modules/comment.module';
+import { AdsModule } from './modules/ads.module';
 
 @Module({
   imports: [
@@ -36,9 +36,9 @@ import { CommentModule } from './modules/comment.module';
     BlogModule,
     PharmacyModule,
     ErrorLogModule,
-    RequestResponseModule,
     CleanupModule,
     CommentModule,
+    AdsModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailService],

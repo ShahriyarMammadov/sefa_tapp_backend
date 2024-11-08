@@ -1,11 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Certificate, Portfolio } from 'src/schema/doctor';
 
 export class UpdateDoctorDto {
   @ApiProperty({ example: 'John', description: 'Doctor name' })
@@ -45,20 +40,18 @@ export class UpdateDoctorDto {
   @ApiProperty({
     example: null,
     description: 'Doctor certificates (optional)',
+    type: [Certificate],
   })
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  readonly certificates: string[] | null;
+  readonly certificates: Portfolio[];
 
   @ApiProperty({
     example: null,
     description: 'Doctor portfolio (optional)',
+    type: [Portfolio],
   })
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  readonly portfolio: string[] | null;
+  readonly portfolio?: Portfolio[];
 
   @ApiProperty({
     example: 'psixoloq',

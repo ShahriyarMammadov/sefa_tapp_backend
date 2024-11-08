@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateErrorLogDto } from 'src/dto/ErrorLog/errorLog.dto';
-import { ErrorLog } from 'src/schema/errorLog/errorLog';
+import { ErrorLog } from 'src/schema/errorLog';
 import { ErrorLogService } from 'src/services/errorLog/errorLog.service';
 
 @ApiTags('Error Log')

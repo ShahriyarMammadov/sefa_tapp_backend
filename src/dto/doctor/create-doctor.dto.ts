@@ -1,11 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { AvailableTime, Certificate, Portfolio } from 'src/schema/doctor';
 
 export class CreateDoctorDto {
   @ApiProperty({ example: 'John', description: 'Doctor name' })
@@ -35,7 +30,7 @@ export class CreateDoctorDto {
 
   @ApiProperty({
     example:
-      'https://s3-alpha-sig.figma.com/img/8d8d/437e/0e1b5ad666082616af75ef1cd0d84e11?Expires=1724025600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=m51T92nVvRWByja~i0XY4bEksnPz7v5Hk1aiXff4O7z3Zfj2ZzTlrK9DrkhQjrut65ATqlgFFmvlAP9oKkUdxfXpxnmbr4etQlnSWNsXv7vl9f-Hx6Ooxb4rCRPKakii1xYp7m4it0-8cKhIInX7N4Knj2R3CDTOd6jGVUETHX-E7pWU3npo9YXF5BEk3y3XxX6PQ-pZtOy3igWJdYGPIZSlCtRu82BD-G5Mo7hffQ-SOOVuUftDIrXWrJmPNASWzKMes5iaE7Qnkw-huNTJC2Az~oyF3iCO565lzYIkCyddhHIuTW1MNie3xxMaphN3ZtofA-MJ2jqCI-QPEvuIbA__',
+      'https://s3-alpha-sig.figma.com/img/cdc3/2d8b/1a3146e31f785ea69e71a0ebaa090ea4?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=UFz84bMlrteFxsAlMbmruh42knNIHrgr9v9XXEZRMz6YWfVaVIBX0iMMTYD2nyZ5IKfq6J1cGITHekMmt8FcqpZDgxhWiQywDjfRlV7IqulzwXDIGHDykjYBMcrnuwQY44lRh1gYS8oTeUBJyXPD84kuNdwOzIAEA1Io5~EufDhCNgXxXP~3WDWFDs7TtnchAK7~9Mqnl-axQH-8kq8OifclQtPBbNyQrDc1AJbWZu8EGuk6fLv1KjNk2SWTfAko5AEZlTEn9~-8GMDGM927CSSfTLSocnBUdEoHq6jgw9g0p19fFAmW8fgGEajhHHei8U9T8ykRTbmi7~Y-K3dkDA__',
     description: 'Doctor image',
   })
   @IsString()
@@ -45,20 +40,31 @@ export class CreateDoctorDto {
   @ApiProperty({
     example: null,
     description: 'Doctor certificates (optional)',
+    type: [Certificate],
   })
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  readonly certificates: string[] | null;
+  readonly certificates: Portfolio[];
 
   @ApiProperty({
     example: null,
     description: 'Doctor portfolio (optional)',
+    type: [Portfolio],
   })
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  readonly portfolio: string[] | null;
+  readonly portfolio?: Portfolio[];
+
+  @ApiProperty({
+    example: [
+      {
+        period: '09.11.2024',
+        slots: [{ time: '11:30 AM', status: 'available' }],
+      },
+    ],
+    description: 'Doctor available times',
+    type: [AvailableTime],
+  })
+  @IsNotEmpty()
+  readonly availableTimes?: AvailableTime[];
 
   @ApiProperty({
     example: 'psixoloq',

@@ -17,7 +17,10 @@ export class DoctorService {
   }
 
   async findAll(): Promise<Doctor[]> {
-    return this.doctorModel.find().exec();
+    return this.doctorModel
+      .find()
+      .select('name surname hospitalName _id rating imageURL specialty')
+      .exec();
   }
 
   async findOne(id: string): Promise<Doctor> {

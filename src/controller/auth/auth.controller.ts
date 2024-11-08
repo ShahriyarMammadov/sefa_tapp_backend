@@ -9,16 +9,16 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   // @UseGuards(LocalAuthGuard)
-  @Post('admin/login') // Admin login endpoint
-  @ApiTags('Auth')
-  @ApiOperation({ summary: 'Admin Login' })
-  @ApiResponse({ status: 201, description: 'Create access_token for admin' })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
-  @ApiResponse({
-    status: 404,
-    description: 'Username or password is incorrect',
-  })
-  @ApiBody({ type: LoginDto })
+  // @Post('admin/login') // Admin login endpoint
+  // @ApiTags('Auth')
+  // @ApiOperation({ summary: 'Admin Login' })
+  // @ApiResponse({ status: 201, description: 'Create access_token for admin' })
+  // @ApiResponse({ status: 400, description: 'Bad Request' })
+  // @ApiResponse({
+  //   status: 404,
+  //   description: 'Username or password is incorrect',
+  // })
+  // @ApiBody({ type: LoginDto })
   // async adminLogin(@Body() loginDto: LoginDto) {
   //   return this.authService.login(loginDto); // Admin login logic
   // }

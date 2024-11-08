@@ -2,8 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { RequestResponseLog } from 'src/schema/errorLog/request-response';
-import { ErrorLog } from 'src/schema/errorLog/errorLog';
+import { ErrorLog } from 'src/schema/errorLog';
 
 @Injectable()
 export class CleanupService {
@@ -11,11 +10,9 @@ export class CleanupService {
 
   constructor(
     @InjectModel(ErrorLog.name) private readonly errorLogModel: Model<ErrorLog>,
-    @InjectModel(RequestResponseLog.name)
-    private readonly requestResponseLogModel: Model<RequestResponseLog>,
   ) {}
 
-  // 2 week
+  // 2 week // 23:58
   @Cron('58 23 * * *')
   async cleanupOldLogs() {
     const twoWeeksAgo = new Date();
@@ -27,15 +24,6 @@ export class CleanupService {
     });
     this.logger.log(
       `Deleted ${errorLogDeleteResult.deletedCount} old error logs.`,
-    );
-
-    // delete request-response-log 2 week
-    const requestResponseLogDeleteResult =
-      await this.requestResponseLogModel.deleteMany({
-        createdAt: { $lt: twoWeeksAgo },
-      });
-    this.logger.log(
-      `Deleted ${requestResponseLogDeleteResult.deletedCount} old request-response logs.`,
     );
   }
 }
