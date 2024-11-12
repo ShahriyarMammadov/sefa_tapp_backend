@@ -43,6 +43,7 @@ export class DoctorService {
     }
 
     const doctor = await this.doctorModel.findById(id).exec();
+
     if (!doctor) {
       throw new NotFoundException(`Doctor with ID "${id}" not found`);
     }
@@ -84,9 +85,12 @@ export class DoctorService {
       return 0;
     }
 
-    const totalRating = comments.reduce((sum, comment) => sum + comment.rating, 0);
+    const totalRating = comments.reduce(
+      (sum, comment) => sum + comment.rating,
+      0,
+    );
     const averageRating = totalRating / comments.length;
 
-    return parseFloat(averageRating.toFixed(2))
+    return parseFloat(averageRating.toFixed(2));
   }
 }

@@ -128,8 +128,8 @@ export class Doctor extends Document {
   @Prop({ type: [Prices], default: [] })
   services: Prices[];
 
-  @Prop({ type: [Location], default: null })
-  location: Location[];
+  @Prop({ type: Location, default: {} })
+  location: Location;
 
   @Prop({ default: 0 })
   averageRating: number;

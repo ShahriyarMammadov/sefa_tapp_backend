@@ -7,7 +7,12 @@ import {
   IsPhoneNumber,
   IsString,
 } from 'class-validator';
-import { AvailableTime, Certificate, Portfolio } from 'src/schema/doctor';
+import {
+  AvailableTime,
+  Certificate,
+  Portfolio,
+  Prices,
+} from 'src/schema/doctor';
 
 export class CreateDoctorDto {
   @ApiProperty({ example: 'Fidan', description: 'name' })
@@ -93,6 +98,14 @@ export class CreateDoctorDto {
   })
   @IsOptional()
   readonly portfolio?: Portfolio[];
+
+  @ApiProperty({
+    example: [],
+    description: 'Services',
+    type: [Prices],
+  })
+  @IsOptional()
+  readonly services: Prices[];
 
   @ApiProperty({
     example: [
