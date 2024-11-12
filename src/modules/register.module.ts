@@ -4,7 +4,6 @@ import { UserController } from 'src/controller/users/users.controller';
 import { AppUsers, userSchema } from 'src/schema/users';
 import { Otp, OtpSchema } from 'src/schema/otp';
 import { AppUserService } from 'src/services/user/userRegister.service';
-import { EmailService } from 'src/services/email/send-email.service';
 import { PharmacyModule } from 'src/modules/pharmacy.module';
 
 @Module({
@@ -16,7 +15,7 @@ import { PharmacyModule } from 'src/modules/pharmacy.module';
     PharmacyModule,
   ],
   controllers: [UserController],
-  providers: [AppUserService, EmailService],
+  providers: [AppUserService],
   exports: [MongooseModule, AppUserService],
 })
 export class AppRegisterModule {}

@@ -98,6 +98,36 @@ export class CommentsService {
     return comments;
   }
 
+  async calculateAverageRating(filter: {
+    doctor?: string;
+    pharmacy?: string;
+    clinic?: string;
+  }): Promise<number> {
+    if (filter.doctor && !isValidObjectId(filter.doctor)) {
+      throw new BadRequestException('Invalid doctor ID format.');
+    }
+    if (filter.pharmacy && !isValidObjectId(filter.pharmacy)) {
+      throw new BadRequestException('Invalid pharmacy ID format.');
+    }
+    if (filter.clinic && !isValidObjectId(filter.clinic)) {
+      throw new BadRequestException('Invalid clinic ID format.');
+    }
+
+    const comments = await this.findCommentsByIds(filter);
+
+    if (comments?.length === 0) {
+      return 0;
+    }
+
+    const totalRating = comments.reduce(
+      (acc, comment) => acc + (comment.rating || 0),
+      0,
+    );
+    const averageRating = totalRating / comments.length;
+
+    return averageRating;
+  }
+
   async deleteComment(commentId: string): Promise<{ message: string }> {
     if (!isValidObjectId(commentId)) {
       throw new BadRequestException(`Invalid ID format.`);

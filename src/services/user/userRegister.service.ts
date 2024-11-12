@@ -6,7 +6,6 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AppUsers } from '../../schema/users';
-import { EmailService } from '../email/send-email.service';
 import { Otp } from 'src/schema/otp';
 import * as nodemailer from 'nodemailer';
 import * as bcrypt from 'bcrypt';
@@ -31,7 +30,6 @@ export class AppUserService {
     @InjectModel(AppUsers.name) private readonly appUserModel: Model<AppUsers>,
     @InjectModel(Otp.name) private readonly otpModel: Model<Otp>,
     @InjectModel(Pharmacy.name) private readonly pharmacyModel: Model<Pharmacy>,
-    private readonly emailService: EmailService,
   ) {
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -176,11 +174,17 @@ export class AppUserService {
     if (isActive === null) {
       return this.appUserModel.find().exec();
     }
-    return this.appUserModel.find({ isActive }).exec();
+    return this.appUserModel
+      .find({ isActive })
+      .select('fullname email phoneNumber profileImageURL')
+      .exec();
   }
 
   async findOne(id: string): Promise<AppUsers> {
-    const user = await this.appUserModel.findById(id).exec();
+    const user = await this.appUserModel
+      .findById(id)
+      .select('fullname email phoneNumber profileImageURL ipAddress')
+      .exec();
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }

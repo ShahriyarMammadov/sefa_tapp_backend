@@ -23,11 +23,6 @@ export class UpdateDoctorDto {
   @IsNotEmpty()
   readonly workExperience: number;
 
-  @ApiProperty({ example: 4, description: 'Rating' })
-  @IsNumber()
-  @IsNotEmpty()
-  readonly rating: number;
-
   @ApiProperty({
     example:
       'https://s3-alpha-sig.figma.com/img/8d8d/437e/0e1b5ad666082616af75ef1cd0d84e11?Expires=1724025600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=m51T92nVvRWByja~i0XY4bEksnPz7v5Hk1aiXff4O7z3Zfj2ZzTlrK9DrkhQjrut65ATqlgFFmvlAP9oKkUdxfXpxnmbr4etQlnSWNsXv7vl9f-Hx6Ooxb4rCRPKakii1xYp7m4it0-8cKhIInX7N4Knj2R3CDTOd6jGVUETHX-E7pWU3npo9YXF5BEk3y3XxX6PQ-pZtOy3igWJdYGPIZSlCtRu82BD-G5Mo7hffQ-SOOVuUftDIrXWrJmPNASWzKMes5iaE7Qnkw-huNTJC2Az~oyF3iCO565lzYIkCyddhHIuTW1MNie3xxMaphN3ZtofA-MJ2jqCI-QPEvuIbA__',

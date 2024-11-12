@@ -1,40 +1,81 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+} from 'class-validator';
 import { AvailableTime, Certificate, Portfolio } from 'src/schema/doctor';
 
 export class CreateDoctorDto {
-  @ApiProperty({ example: 'John', description: 'Doctor name' })
-  @IsString()
+  @ApiProperty({ example: 'Fidan', description: 'name' })
   @IsNotEmpty()
+  @IsString()
   readonly name: string;
 
-  @ApiProperty({ example: 'Doe', description: 'Doctor surname' })
-  @IsString()
+  @ApiProperty({ example: 'Haqverdiyeva', description: 'surname' })
   @IsNotEmpty()
+  @IsString()
   readonly surname: string;
 
-  @ApiProperty({ example: 'Mərkəzi Klinika', description: 'hospitalName' })
-  @IsString()
+  @ApiProperty({ example: 'Avqust 27, 1999', description: 'date of birth' })
   @IsNotEmpty()
+  @IsString()
+  readonly dateOfBirth: string;
+
+  @ApiProperty({ example: 'Azərbaycan', description: 'nationality' })
+  @IsNotEmpty()
+  @IsString()
+  readonly nationality: string;
+
+  @ApiProperty({ example: 'Yeni Klinika', description: 'hospitalName' })
+  @IsOptional()
   readonly hospitalName: string;
 
-  @ApiProperty({ example: 5, description: 'Work experience' })
-  @IsNumber()
+  @ApiProperty({ example: 2, description: 'Work experience' })
   @IsNotEmpty()
+  @IsNumber()
   readonly workExperience: number;
 
-  @ApiProperty({ example: 4, description: 'Rating' })
-  @IsNumber()
+  @ApiProperty({
+    example: 'Stomatoloq',
+    description: 'specialty',
+  })
   @IsNotEmpty()
-  readonly rating: number;
+  @IsString()
+  readonly specialty: string;
+
+  @ApiProperty({
+    example: 'Hi, I am Doctor',
+    description: 'about',
+  })
+  @IsOptional()
+  readonly about: string;
+
+  @ApiProperty({
+    example: 'doctor@gmail.com',
+    description: 'email address',
+  })
+  @IsNotEmpty()
+  @IsEmail()
+  readonly email: string;
+
+  @ApiProperty({
+    example: '+994-(50)-313-44-73',
+    description: 'phoneNumber',
+  })
+  @IsNotEmpty()
+  @IsPhoneNumber()
+  readonly phoneNumber: string;
 
   @ApiProperty({
     example:
-      'https://s3-alpha-sig.figma.com/img/cdc3/2d8b/1a3146e31f785ea69e71a0ebaa090ea4?Expires=1731888000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=UFz84bMlrteFxsAlMbmruh42knNIHrgr9v9XXEZRMz6YWfVaVIBX0iMMTYD2nyZ5IKfq6J1cGITHekMmt8FcqpZDgxhWiQywDjfRlV7IqulzwXDIGHDykjYBMcrnuwQY44lRh1gYS8oTeUBJyXPD84kuNdwOzIAEA1Io5~EufDhCNgXxXP~3WDWFDs7TtnchAK7~9Mqnl-axQH-8kq8OifclQtPBbNyQrDc1AJbWZu8EGuk6fLv1KjNk2SWTfAko5AEZlTEn9~-8GMDGM927CSSfTLSocnBUdEoHq6jgw9g0p19fFAmW8fgGEajhHHei8U9T8ykRTbmi7~Y-K3dkDA__',
+      'https://static.vecteezy.com/system/resources/thumbnails/028/287/555/small_2x/an-indian-young-female-doctor-isolated-on-green-ai-generated-photo.jpg',
     description: 'Doctor image',
   })
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   readonly imageURL: string;
 
   @ApiProperty({
@@ -65,20 +106,4 @@ export class CreateDoctorDto {
   })
   @IsNotEmpty()
   readonly availableTimes?: AvailableTime[];
-
-  @ApiProperty({
-    example: 'psixoloq',
-    description: 'Doctors specialty',
-  })
-  @IsString()
-  @IsNotEmpty()
-  readonly specialty: string;
-
-  @ApiProperty({
-    example: 'lorem50',
-    description: 'Doctors about',
-  })
-  @IsString()
-  @IsNotEmpty()
-  readonly about: string;
 }

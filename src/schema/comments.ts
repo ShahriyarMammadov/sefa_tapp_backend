@@ -33,6 +33,9 @@ export class Comments extends Document {
 
   @Prop({ required: true })
   comment: string;
+
+  @Prop({ required: false })
+  rating: number;
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comments);

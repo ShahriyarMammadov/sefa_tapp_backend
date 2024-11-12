@@ -18,6 +18,6 @@ import { AppRegisterModule } from './register.module';
   ],
   controllers: [CommentsController],
   providers: [CommentsService],
-  exports: [MongooseModule],
+  exports: [MongooseModule, CommentsService],
 })
 export class CommentModule {}

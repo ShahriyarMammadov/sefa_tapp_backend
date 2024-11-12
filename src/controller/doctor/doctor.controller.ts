@@ -35,9 +35,9 @@ export class DoctorController {
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateDoctorDto: CreateDoctorDto,
+    @Body() createDoctorDto: CreateDoctorDto,
   ): Promise<Doctor> {
-    return this.doctorService.update(id, updateDoctorDto);
+    return this.doctorService.update(id, createDoctorDto);
   }
 
   @Delete(':id')

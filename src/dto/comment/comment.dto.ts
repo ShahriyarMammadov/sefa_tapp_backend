@@ -31,10 +31,17 @@ export class CommentDto {
   readonly pharmacy?: string;
 
   @ApiProperty({
-    example: '672910aa89738599313e186b',
+    example: 'hi, all services very good',
     description: 'Comment text',
   })
   @IsNotEmpty()
   @IsString()
   readonly comment: string;
+
+  @ApiProperty({
+    example: '5',
+    description: 'rating star count',
+  })
+  @IsOptional()
+  readonly rating: number;
 }

@@ -17,7 +17,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Şəfa Tapp')
     .setDescription('Sefa Tapp API')
-    .setVersion('2.0.2')
+    .setVersion('2.12.2')
     // .addTag('API')
     .build();
   const document = SwaggerModule.createDocument(app, config);
