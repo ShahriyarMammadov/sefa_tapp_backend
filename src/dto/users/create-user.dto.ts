@@ -59,11 +59,10 @@ export class CreateUserDto {
   readonly repeatPassword: string;
 
   @ApiProperty({
-    example: '192.168.1.1',
-    description: '192.168.1.1',
+    example: null,
+    description: null,
   })
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   readonly ipAddress: string;
 
   @ApiProperty({

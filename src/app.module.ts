@@ -17,6 +17,7 @@ import { ErrorLogModule } from './modules/errorLog/errorLog.module';
 import { CleanupModule } from './modules/errorLog/clearJob.module';
 import { CommentModule } from './modules/comment.module';
 import { AdsModule } from './modules/ads.module';
+import { ReservationModule } from './modules/reservation.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { AdsModule } from './modules/ads.module';
     CleanupModule,
     CommentModule,
     AdsModule,
+    ReservationModule
   ],
   controllers: [AppController],
   providers: [AppService, EmailService],

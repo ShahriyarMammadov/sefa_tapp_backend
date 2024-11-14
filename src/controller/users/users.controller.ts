@@ -10,6 +10,7 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  Req,
 } from '@nestjs/common';
 import { AppUserService } from '../../services/user/userRegister.service';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -17,6 +18,7 @@ import { VerifyOtpDto } from 'src/dto/verifyOTP.dto';
 import { AppUserWithComments } from 'src/services/user/userRegister.service';
 import { CreateUserDto } from 'src/dto/users/create-user.dto';
 import { UpdateUserDto } from 'src/dto/users/update-user-dto';
+import { Request } from 'express';
 
 @ApiTags('Register')
 @Controller('User')
@@ -53,8 +55,11 @@ export class UserController {
   }
 
   @Post('register')
-  async registerUser(@Body() CreateUserDto: CreateUserDto) {
-    return this.appUserService.registerUser(CreateUserDto);
+  async registerUser(
+    @Body() CreateUserDto: CreateUserDto,
+    @Req() req: Request,
+  ) {
+    return this.appUserService.registerUser(CreateUserDto, req);
   }
 
   // Get all users based on isActive status

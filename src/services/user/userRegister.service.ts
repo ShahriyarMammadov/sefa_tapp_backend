@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  Req,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -12,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 import { Pharmacy } from 'src/schema/pharmacy';
 import { CreateUserDto } from 'src/dto/users/create-user.dto';
 import { UpdateUserDto } from 'src/dto/users/update-user-dto';
+import { Request } from 'express';
 
 interface Comment {
   comment: string;
@@ -32,10 +34,12 @@ export class AppUserService {
     @InjectModel(Pharmacy.name) private readonly pharmacyModel: Model<Pharmacy>,
   ) {
     this.transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.zoho.com',
+      port: 465,
+      secure: true,
       auth: {
-        user: 'shahriyarmammadov16@gmail.com',
-        pass: 'ipteqypnfwfqhcuu',
+        user: 'info@sefatapp.com',
+        pass: 'bw96bqyZ5e9M',
       },
     });
   }
@@ -56,7 +60,7 @@ export class AppUserService {
   // Send OTP email
   async sendOtpEmail(to: string, otp: string): Promise<void> {
     const mailOptions = {
-      from: 'shahriyarmammadov16@gmail.com',
+      from: 'info@sefatapp.com',
       to,
       subject: 'Şəfa Tapp tətbiqinə xoş gəlmisiniz.',
       html: `
@@ -78,8 +82,33 @@ export class AppUserService {
     await this.transporter.sendMail(mailOptions);
   }
 
+  // Send welcome email
+  async sendWelcomeEmail(to: string): Promise<void> {
+    const mailOptions = {
+      from: 'info@sefatapp.com',
+      to,
+      subject: 'Şəfa Tapp Tətbiqinə Xoş Gəlmişsiniz!',
+      html: `
+      <div style="font-family: Arial, sans-serif; color: #333;">
+        <h2 style="color: #4CAF50;">Hörmətli istifadəçi, Şəfa Tapp Tətbiqinə Xoş Gəlmişsiniz!</h2>
+        <p>Hesabınız uğurla aktiv edildi. Artıq tətbiqimizi tam olaraq istifadə edə bilərsiniz.</p>
+        <p>Əgər əlavə sualınız varsa, bizimlə əlaqə saxlamaqdan çəkinməyin.</p>
+        <br>
+        <img src="https://firebasestorage.googleapis.com/v0/b/elektra-az.appspot.com/o/images%2Fsefatapp.png?alt=media&token=9a6749e1-4e98-468f-a8f0-097bf43dd192" alt="Logo" style="width: 150px; height: auto;">
+        <p>Ən xoş arzularla,<br>Şəfa Tapp Komandası</p>
+      </div>
+    `,
+    };
+    await this.transporter.sendMail(mailOptions);
+  }
+
   // Register user with OTP
-  async registerUser(CreateUserDto: CreateUserDto): Promise<AppUsers> {
+  async registerUser(
+    CreateUserDto: CreateUserDto,
+    req: Request,
+  ): Promise<AppUsers> {
+    const ipAddress = req.ip;
+
     const existingUser = await this.appUserModel
       .findOne({ email: CreateUserDto.email })
       .exec();
@@ -121,6 +150,7 @@ export class AppUserService {
       repeatPassword: hashedPassword,
       otp,
       isActive: false,
+      ipAddress: ipAddress,
     });
 
     await newUser.save();
@@ -163,6 +193,8 @@ export class AppUserService {
     // Update user as active
     user.isActive = true;
     await user.save();
+
+    await this.sendWelcomeEmail(email);
 
     // Remove OTP record after successful verification
     await this.otpModel.deleteOne({ _id: otpRecord._id }).exec();
