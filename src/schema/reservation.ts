@@ -39,6 +39,9 @@ export class Reservation extends Document {
 
   @Prop({ required: false, default: null })
   price: number;
+
+  @Prop({ required: false, default: true })
+  isActive: boolean;
 }
 
 export const reservationSchema = SchemaFactory.createForClass(Reservation);

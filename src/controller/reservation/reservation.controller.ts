@@ -8,6 +8,7 @@ import {
   Delete,
   HttpStatus,
   HttpException,
+  NotFoundException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ReservationDto } from 'src/dto/reservation.dto';
@@ -53,17 +54,29 @@ export class ReservationController {
     return this.reservationService.getAllReservations();
   }
 
-  @Patch(':id')
-  @ApiOperation({ summary: 'Update reservation by ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The reservation has been successfully updated.',
-  })
-  async update(
-    @Param('id') id: string,
-    @Body() reservationDto: ReservationDto,
-  ): Promise<Reservation> {
-    return this.reservationService.updateReservation(id, reservationDto);
+  // @Patch(':id')
+  // @ApiOperation({ summary: 'Update reservation by ID' })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'The reservation has been successfully updated.',
+  // })
+  // async update(
+  //   @Param('id') id: string,
+  //   @Body() reservationDto: ReservationDto,
+  // ): Promise<Reservation> {
+  //   return this.reservationService.updateReservation(id, reservationDto);
+  // }
+
+  @Post(':id/reject')
+  @ApiOperation({ summary: 'Reject reservation by ID' })
+  async rejectReservation(@Param('id') id: string): Promise<Reservation> {
+    try {
+      return await this.reservationService.rejectReserv(id);
+    } catch (error) {
+      throw new NotFoundException(
+        `Reservation with ID ${id} not found or could not be updated`,
+      );
+    }
   }
 
   @Delete(':id')

@@ -64,4 +64,7 @@ export class ReservationDto {
 
   @IsOptional()
   price: number;
+
+  @IsOptional()
+  isActive: boolean;
 }

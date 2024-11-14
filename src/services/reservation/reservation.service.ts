@@ -7,14 +7,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
 import { ReservationDto } from 'src/dto/reservation.dto';
 import { Reservation } from 'src/schema/reservation';
-import { Doctor } from 'src/schema/doctor'; // Import the Doctor schema/model
+import { Doctor } from 'src/schema/doctor';
 
 @Injectable()
 export class ReservationService {
   constructor(
     @InjectModel(Reservation.name)
     private readonly reservationModel: Model<Reservation>,
-    @InjectModel(Doctor.name) private readonly doctorModel: Model<Doctor>, // Inject Doctor model
+    @InjectModel(Doctor.name) private readonly doctorModel: Model<Doctor>,
   ) {}
 
   async createReservation(
@@ -95,7 +95,18 @@ export class ReservationService {
   }
 
   async getReservationById(id: string): Promise<Reservation> {
-    const reservation = await this.reservationModel.findById(id).exec();
+    const reservation = await this.reservationModel
+      .findById(id)
+      .populate(
+        'userId',
+        '_id fullName email phoneNumber profileImageURL createdAt',
+      )
+      .populate(
+        'doctorId',
+        '_id name surname dateOfBirth imageURL createdAt specialty hospitalName email phoneNumber about',
+      )
+      .exec();
+
     if (!reservation) {
       throw new NotFoundException(`Reservation with ID ${id} not found`);
     }
@@ -106,6 +117,10 @@ export class ReservationService {
     id: string,
     reservationDto: ReservationDto,
   ): Promise<Reservation> {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException(`Invalid ID format.`);
+    }
+
     const updatedReservation = await this.reservationModel
       .findByIdAndUpdate(id, reservationDto, { new: true })
       .exec();
@@ -115,7 +130,50 @@ export class ReservationService {
     return updatedReservation;
   }
 
+  async rejectReserv(id: string): Promise<Reservation> {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException(`Invalid ID format.`);
+    }
+
+    const reservation = await this.reservationModel.findById(id).exec();
+    if (!reservation) {
+      throw new NotFoundException(`Reservation with ID ${id} not found`);
+    }
+
+    const doctorId = reservation.doctorId;
+    const reservationTime = reservation.reservationTime;
+
+    const doctor = await this.doctorModel.findById(doctorId).exec();
+    if (!doctor) {
+      throw new NotFoundException(`Doctor with ID ${doctorId} not found`);
+    }
+
+    const [datePart, timePart] = reservationTime.split('T');
+    const period = datePart;
+    const slotTime = timePart;
+
+    const periodObj = doctor.availableTimes.find((p) => p.period === period);
+    if (periodObj) {
+      const slot = periodObj.slots.find((s) => s.time === slotTime);
+      if (slot) {
+        slot.status = 'available';
+        doctor.markModified('availableTimes');
+      }
+    }
+
+    await doctor.save();
+
+    reservation.isActive = false;
+    await reservation.save();
+
+    return reservation;
+  }
+
   async deleteReservation(id: string): Promise<Reservation> {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException(`Invalid ID format.`);
+    }
+
     const deletedReservation = await this.reservationModel
       .findByIdAndDelete(id)
       .exec();
