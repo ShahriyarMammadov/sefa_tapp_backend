@@ -20,6 +20,12 @@ export class ErrorLog extends Document {
 
   @Prop()
   url: string;
+
+  @Prop({ required: false, type: Object })
+  request: Record<string, any>;
+
+  @Prop({ required: false, type: Object })
+  response: Record<string, any>;
 }
 
 export const ErrorLogSchema = SchemaFactory.createForClass(ErrorLog);
