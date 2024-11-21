@@ -19,6 +19,7 @@ import { CommentModule } from './modules/comment.module';
 import { AdsModule } from './modules/ads.module';
 import { ReservationModule } from './modules/reservation.module';
 import { SearchModule } from './modules/search.module';
+import { RejectReservJobModule } from './modules/rejectReservJob.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { SearchModule } from './modules/search.module';
     PharmacyModule,
     ErrorLogModule,
     CleanupModule,
+    RejectReservJobModule,
     CommentModule,
     AdsModule,
     ReservationModule,
