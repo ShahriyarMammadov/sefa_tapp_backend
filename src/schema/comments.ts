@@ -31,6 +31,13 @@ export class Comments extends Document {
   })
   pharmacy: string;
 
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'PharmacyProducts',
+    required: false,
+  })
+  pharmacyProduct: string;
+
   @Prop({ required: true })
   comment: string;
 

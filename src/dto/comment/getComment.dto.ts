@@ -24,6 +24,13 @@ export class GetCommentDto {
   readonly doctor?: string;
 
   @ApiProperty({
+    example: '67476fa2daad9325d4b2cf11',
+    description: 'Pharmacy product ID',
+  })
+  @IsOptional()
+  readonly pharmacyProduct?: string;
+
+  @ApiProperty({
     example: '672910aa89738599313e186b',
     description: 'Pharmacy ID',
   })

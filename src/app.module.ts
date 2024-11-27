@@ -7,7 +7,6 @@ import { MulterModule } from '@nestjs/platform-express';
 import { EmailService } from './services/email/send-email.service';
 import { DoctorModule } from './modules/doctor.module';
 import { ClinicsModule } from './modules/clinics.module';
-import { MedicineModule } from './modules/medicine.module';
 import { WishlistModule } from './modules/wishlist.module';
 import { AppRegisterModule } from './modules/register.module';
 import { ContactUsModule } from './modules/contactUs.module';
@@ -20,6 +19,7 @@ import { AdsModule } from './modules/ads.module';
 import { ReservationModule } from './modules/reservation.module';
 import { SearchModule } from './modules/search.module';
 import { RejectReservJobModule } from './modules/rejectReservJob.module';
+import { PharmacyProductsModule } from './modules/pharmacyProducts.module';
 
 @Module({
   imports: [
@@ -32,7 +32,6 @@ import { RejectReservJobModule } from './modules/rejectReservJob.module';
     AuthModule,
     DoctorModule,
     ClinicsModule,
-    MedicineModule,
     WishlistModule,
     AppRegisterModule,
     ContactUsModule,
@@ -45,6 +44,7 @@ import { RejectReservJobModule } from './modules/rejectReservJob.module';
     AdsModule,
     ReservationModule,
     SearchModule,
+    PharmacyProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailService],

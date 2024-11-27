@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsString,
-  IsNumber,
-  IsOptional,
-  IsArray,
-} from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
 
 class LocationDto {
   @ApiProperty({
@@ -30,30 +24,30 @@ class LocationDto {
   readonly long: number;
 }
 
-export class CommentDto {
-  @ApiProperty({
-    example: 'userId123',
-    description: 'ID of the user who made the comment',
-  })
-  @IsString()
-  @IsNotEmpty()
-  readonly userId: string;
+// export class CommentDto {
+//   @ApiProperty({
+//     example: 'userId123',
+//     description: 'ID of the user who made the comment',
+//   })
+//   @IsString()
+//   @IsNotEmpty()
+//   readonly userId: string;
 
-  @ApiProperty({
-    example: 'Great service and friendly staff!',
-    description: 'Content of the comment',
-  })
-  @IsString()
-  @IsNotEmpty()
-  readonly comment: string;
+//   @ApiProperty({
+//     example: 'Great service and friendly staff!',
+//     description: 'Content of the comment',
+//   })
+//   @IsString()
+//   @IsNotEmpty()
+//   readonly comment: string;
 
-  @ApiProperty({
-    description: 'Date when the comment was made',
-    example: '2024-10-13T12:00:00Z',
-  })
-  @IsOptional()
-  readonly date: Date;
-}
+//   @ApiProperty({
+//     description: 'Date when the comment was made',
+//     example: '2024-10-13T12:00:00Z',
+//   })
+//   @IsOptional()
+//   readonly date: Date;
+// }
 
 export class CreatePharmacyDto {
   @ApiProperty({
@@ -92,13 +86,4 @@ export class CreatePharmacyDto {
   @IsString()
   @IsNotEmpty()
   readonly about: string;
-
-  @ApiProperty({
-    type: [CommentDto],
-    description: 'Comments for the Pharmacy',
-    required: false,
-  })
-  @IsOptional()
-  @IsArray()
-  readonly comments?: CommentDto[];
 }

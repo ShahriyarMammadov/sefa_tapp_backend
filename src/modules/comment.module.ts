@@ -7,12 +7,14 @@ import { PharmacyModule } from './pharmacy.module';
 import { DoctorModule } from './doctor.module';
 import { ClinicsModule } from './clinics.module';
 import { AppRegisterModule } from './register.module';
+import { PharmacyProductsModule } from './pharmacyProducts.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Comments.name, schema: CommentSchema }]),
     AppRegisterModule,
     PharmacyModule,
+    PharmacyProductsModule,
     DoctorModule,
     ClinicsModule,
   ],

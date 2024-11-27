@@ -11,6 +11,7 @@ import { PharmacyService } from '../pharmacy/pharmacy.service';
 import { DoctorService } from '../doctor/doctor.service';
 import { ClinicsService } from '../clinics/clinic.service';
 import { AppUserService } from '../user/userRegister.service';
+import { PharmacyProductsService } from '../pharmacyProduct/pharmacyProduct.service';
 
 @Injectable()
 export class CommentsService {
@@ -18,6 +19,7 @@ export class CommentsService {
     @InjectModel(Comments.name) private commentModel: Model<Comments>,
     private userService: AppUserService,
     private pharmacyService: PharmacyService,
+    private pharmacyProductService: PharmacyProductsService,
     private doctorService: DoctorService,
     private clinicService: ClinicsService,
   ) {}
@@ -40,6 +42,19 @@ export class CommentsService {
       const pharmacy = await this.pharmacyService.findOne(dto.pharmacy);
       if (!pharmacy) {
         throw new NotFoundException('Pharmacy not found');
+      }
+    }
+
+    if (dto.pharmacyProduct) {
+      if (!isValidObjectId(dto.pharmacyProduct)) {
+        throw new BadRequestException(`Invalid pharmacy product ID format.`);
+      }
+
+      const pharmacy = await this.pharmacyProductService.findOne(
+        dto.pharmacyProduct,
+      );
+      if (!pharmacy) {
+        throw new NotFoundException('Pharmacy product not found');
       }
     }
 
@@ -74,6 +89,7 @@ export class CommentsService {
     clinic?: string;
     doctor?: string;
     pharmacy?: string;
+    pharmacyProduct?: string;
   }): Promise<Comments[]> {
     const queryFilter: any = {};
 
@@ -82,6 +98,8 @@ export class CommentsService {
     if (filter.clinic) queryFilter.clinic = filter.clinic;
     if (filter.doctor) queryFilter.doctor = filter.doctor;
     if (filter.pharmacy) queryFilter.pharmacy = filter.pharmacy;
+    if (filter.pharmacyProduct)
+      queryFilter.pharmacyProduct = filter.pharmacyProduct;
 
     const comments = await this.commentModel
       .find(queryFilter)
@@ -89,6 +107,7 @@ export class CommentsService {
       .populate('clinic', 'name location')
       .populate('doctor', 'name surname')
       .populate('pharmacy', 'name location')
+      .populate('pharmacyProduct', 'name price')
       .exec();
 
     if (!comments || comments.length === 0) {
@@ -102,6 +121,7 @@ export class CommentsService {
     doctor?: string;
     pharmacy?: string;
     clinic?: string;
+    pharmacyProduct?: string;
   }): Promise<number> {
     if (filter.doctor && !isValidObjectId(filter.doctor)) {
       throw new BadRequestException('Invalid doctor ID format.');
@@ -111,6 +131,9 @@ export class CommentsService {
     }
     if (filter.clinic && !isValidObjectId(filter.clinic)) {
       throw new BadRequestException('Invalid clinic ID format.');
+    }
+    if (filter.pharmacyProduct && !isValidObjectId(filter.pharmacyProduct)) {
+      throw new BadRequestException('Invalid pharmacy product ID format.');
     }
 
     const comments = await this.findCommentsByIds(filter);

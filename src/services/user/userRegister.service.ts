@@ -31,7 +31,6 @@ export class AppUserService {
   constructor(
     @InjectModel(AppUsers.name) private readonly appUserModel: Model<AppUsers>,
     @InjectModel(Otp.name) private readonly otpModel: Model<Otp>,
-    @InjectModel(Pharmacy.name) private readonly pharmacyModel: Model<Pharmacy>,
   ) {
     this.transporter = nodemailer.createTransport({
       host: 'smtp.zoho.com',
@@ -221,29 +220,6 @@ export class AppUserService {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
     return user;
-  }
-
-  async commentsByUserId(id: string): Promise<AppUserWithComments> {
-    const user = await this.appUserModel.findById(id).lean().exec();
-
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
-
-    const pharmacyComments = await this.pharmacyModel
-      .find({ 'comments.userId': id })
-      .select('comments')
-      .lean()
-      .exec();
-
-    const pharmacyUserComments: Comment[] = pharmacyComments.flatMap((doc) =>
-      (doc.comments || []).map((comment: any) => ({
-        comment: comment.comment,
-        createdAt: comment.date,
-      })),
-    );
-
-    return { ...user, comments: pharmacyUserComments } as AppUserWithComments;
   }
 
   async update(id: string, UpdateUserDto: UpdateUserDto): Promise<AppUsers> {

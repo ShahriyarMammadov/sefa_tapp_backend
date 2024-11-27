@@ -7,7 +7,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
 import { Wishlist } from '../../schema/wishlist';
 import { WishlistDto } from '../../dto/wishlist/create-wishlist.dto';
-import { Medicine } from '../../schema/medicine';
 import { Clinics } from '../../schema/clinics';
 import { AppUsers } from 'src/schema/users';
 import { Pharmacy } from 'src/schema/pharmacy';
@@ -17,7 +16,6 @@ export class WishlistService {
   constructor(
     @InjectModel(Wishlist.name) private readonly wishlistModel: Model<Wishlist>,
     @InjectModel(AppUsers.name) private readonly userModel: Model<AppUsers>,
-    @InjectModel(Medicine.name) private readonly medicineModel: Model<Medicine>,
     @InjectModel(Clinics.name) private readonly clinicModel: Model<Clinics>,
     @InjectModel(Pharmacy.name) private readonly pharmacyModel: Model<Pharmacy>,
   ) {}
@@ -49,19 +47,19 @@ export class WishlistService {
     }
 
     // Validate medicineID and clinicID
-    if (medicineID) {
-      if (!isValidObjectId(medicineID)) {
-        throw new BadRequestException(`Invalid medicine ID format.`);
-      }
+    // if (medicineID) {
+    //   if (!isValidObjectId(medicineID)) {
+    //     throw new BadRequestException(`Invalid medicine ID format.`);
+    //   }
 
-      const medicineExists = await this.checkMedicineExists(medicineID);
+    //   const medicineExists = await this.checkMedicineExists(medicineID);
 
-      if (!medicineExists) {
-        throw new NotFoundException(
-          `Medicine with ID ${medicineID} not found.`,
-        );
-      }
-    }
+    //   if (!medicineExists) {
+    //     throw new NotFoundException(
+    //       `Medicine with ID ${medicineID} not found.`,
+    //     );
+    //   }
+    // }
 
     if (clinicID) {
       if (!isValidObjectId(clinicID)) {
@@ -101,7 +99,7 @@ export class WishlistService {
 
     const wishlists = await this.wishlistModel
       .find({ userID: userID })
-      .populate('medicineID')
+      // .populate('medicineID')
       .populate('clinicID')
       .populate('pharmacyID')
       .exec();
@@ -128,10 +126,10 @@ export class WishlistService {
   }
 
   // Mock validation methods
-  private async checkMedicineExists(medicineID: string): Promise<boolean> {
-    const medicine = await this.medicineModel.findById(medicineID).exec();
-    return !!medicine;
-  }
+  // private async checkMedicineExists(medicineID: string): Promise<boolean> {
+  //   const medicine = await this.medicineModel.findById(medicineID).exec();
+  //   return !!medicine;
+  // }
 
   private async checkClinicExists(clinicID: string): Promise<boolean> {
     const clinic = await this.clinicModel.findById(clinicID).exec();

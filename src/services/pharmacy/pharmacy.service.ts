@@ -5,18 +5,16 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
-import { Comment, Pharmacy } from 'src/schema/pharmacy';
-import {
-  CommentDto,
-  CreatePharmacyDto,
-} from 'src/dto/pharmacy/create-pharmacy.dto';
-import { AppUsers } from 'src/schema/users';
+import { Pharmacy } from 'src/schema/pharmacy';
+import { CreatePharmacyDto } from 'src/dto/pharmacy/create-pharmacy.dto';
+import { PharmacyProducts } from 'src/schema/pharmacyProducts';
 
 @Injectable()
 export class PharmacyService {
   constructor(
     @InjectModel(Pharmacy.name) private readonly PharmacyModel: Model<Pharmacy>,
-    @InjectModel(AppUsers.name) private userModel: Model<AppUsers>,
+    @InjectModel(PharmacyProducts.name)
+    private readonly PharmacyProductModel: Model<PharmacyProducts>,
   ) {}
 
   async create(CreatePharmacyDto: CreatePharmacyDto): Promise<Pharmacy> {
@@ -38,35 +36,39 @@ export class PharmacyService {
       throw new NotFoundException(`Pharmacy with ID "${id}" not found`);
     }
 
-    const userIds = pharmacy.comments.map((comment) => comment.userId);
+    return pharmacy;
+  }
 
-    const users: AppUsers[] = await this.userModel
-      .find({ _id: { $in: userIds } })
+  async getProductsByPharmacyId(
+    pharmacyId: string,
+  ): Promise<PharmacyProducts[]> {
+    if (!isValidObjectId(pharmacyId)) {
+      throw new BadRequestException(`Invalid Pharmacy ID format.`);
+    }
+
+    const pharmacyExists = await this.PharmacyModel.findById(pharmacyId)
+      .select(
+        '_id name numberAvailable averageRating price about images createdAt',
+      )
+      .exec();
+      
+    if (!pharmacyExists) {
+      throw new NotFoundException(
+        `Pharmacy with ID "${pharmacyId}" not found.`,
+      );
+    }
+
+    const products = await this.PharmacyProductModel.find({ pharmacyId })
+      .select('-__v')
       .exec();
 
-    const userMap = {};
-    users.forEach((user) => {
-      userMap[user._id.toString()] = user;
-    });
+    if (!products.length) {
+      throw new NotFoundException(
+        `No products found for Pharmacy ID "${pharmacyId}".`,
+      );
+    }
 
-    const commentsWithUserDetails = pharmacy.comments.map((comment) => {
-      const user = userMap[comment.userId.toString()] || null;
-      return {
-        ...comment,
-        user: user
-          ? {
-              fullName: user?.fullName,
-              email: user?.email,
-              phoneNumber: user?.phoneNumber,
-              profileImageURL: user?.profileImageURL,
-            }
-          : null,
-      };
-    });
-
-    pharmacy.comments = commentsWithUserDetails;
-
-    return pharmacy;
+    return products;
   }
 
   async update(
@@ -97,78 +99,5 @@ export class PharmacyService {
     if (!result) {
       throw new NotFoundException(`Pharmacy with ID "${id}" not found`);
     }
-  }
-
-  async addComment(id: string, commentDto: CommentDto): Promise<Pharmacy> {
-    if (!isValidObjectId(id)) {
-      throw new BadRequestException(`Invalid ID format.`);
-    }
-
-    const pharmacy = await this.PharmacyModel.findById(id);
-
-    if (!pharmacy) {
-      throw new NotFoundException(`Pharmacy with ID ${id} not found`);
-    }
-
-    if (!isValidObjectId(commentDto.userId)) {
-      throw new BadRequestException(`Invalid user ID format.`);
-    }
-
-    const user = await this.userModel.findById(commentDto.userId);
-    if (!user) {
-      throw new NotFoundException(
-        `User with ID ${commentDto.userId} not found`,
-      );
-    }
-
-    const newComment = {
-      userId: commentDto.userId,
-      comment: commentDto.comment,
-      date: new Date(),
-    };
-
-    if (!pharmacy.comments) {
-      pharmacy.comments = [];
-    }
-
-    pharmacy.comments.push(newComment);
-    return pharmacy.save();
-  }
-
-  async getCommentByPharmacyId(id: string): Promise<PopulatedComment[]> {
-    if (!isValidObjectId(id)) {
-      throw new BadRequestException(`Invalid ID format.`);
-    }
-
-    const pharmacy = await this.PharmacyModel.findById(id).lean();
-
-    if (!pharmacy) {
-      throw new NotFoundException(`Pharmacy with ID ${id} not found`);
-    }
-
-    const userIds = pharmacy.comments.map((comment) => comment.userId);
-
-    const users: AppUsers[] = await this.userModel
-      .find({ _id: { $in: userIds } })
-      .exec();
-
-    const userMap = {};
-    users.forEach((user) => {
-      userMap[user._id.toString()] = user;
-    });
-
-    const commentsWithUserDetails = pharmacy.comments.map((comment) => {
-      const user = userMap[comment.userId.toString()] || null;
-
-      return {
-        ...comment,
-        fullName: user?.fullName,
-        email: user?.email,
-        phoneNumber: user?.phoneNumber,
-        profileImageURL: user?.profileImageURL,
-      };
-    });
-
-    return commentsWithUserDetails;
   }
 }

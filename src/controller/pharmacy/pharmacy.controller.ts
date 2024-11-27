@@ -9,12 +9,9 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PharmacyService } from 'src/services/pharmacy/pharmacy.service';
-import {
-  CommentDto,
-  CreatePharmacyDto,
-} from 'src/dto/pharmacy/create-pharmacy.dto';
+import { CreatePharmacyDto } from 'src/dto/pharmacy/create-pharmacy.dto';
 import { Pharmacy } from 'src/schema/pharmacy';
-import { Comment } from 'src/schema/pharmacy';
+import { PharmacyProducts } from 'src/schema/pharmacyProducts';
 
 @ApiTags('Pharmacy')
 @Controller('pharmacy')
@@ -41,6 +38,14 @@ export class PharmacyController {
     return this.pharmacyService.findOne(id);
   }
 
+  @Get('/products/:id')
+  @ApiOperation({ summary: 'Get Pharmacy products By pharmacy ID' })
+  async getProductsByPharmacyId(
+    @Param('id') pharmacyId: string,
+  ): Promise<PharmacyProducts[]> {
+    return this.pharmacyService.getProductsByPharmacyId(pharmacyId);
+  }
+
   @Put(':id')
   @ApiOperation({ summary: 'Edit Pharmacy By ID' })
   async update(
@@ -54,17 +59,5 @@ export class PharmacyController {
   @ApiOperation({ summary: 'Delete Pharmacy By ID' })
   async remove(@Param('id') id: string): Promise<void> {
     return this.pharmacyService.remove(id);
-  }
-
-  @Post(':id/comments')
-  @ApiOperation({ summary: 'Add comment to Pharmacy' })
-  async addComment(@Param('id') id: string, @Body() commentDto: CommentDto) {
-    return this.pharmacyService.addComment(id, commentDto);
-  }
-
-  @Get(':id/comments')
-  @ApiOperation({ summary: 'Get comments by Pharmacy ID' })
-  async getCommentByPharmacyId(@Param('id') id: string): Promise<Comment[]> {
-    return this.pharmacyService.getCommentByPharmacyId(id);
   }
 }
