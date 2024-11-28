@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
 
 export class WishlistDto {
   @ApiProperty({
-    example: '66b5bc1010a888446bf92e85',
+    example: '672910aa89738599313e186b',
     description: 'user id',
   })
   @IsString()
@@ -11,13 +11,13 @@ export class WishlistDto {
   readonly userID: string;
 
   @ApiProperty({
-    example: '66bba45df6fabb6b6c153788',
-    description: 'Medicine ID',
+    example: '67476fa2daad9325d4b2cf11',
+    description: 'pharmacy product ID',
     required: false,
   })
   @IsString()
   @IsOptional()
-  readonly medicineID?: string;
+  readonly pharmacyProductId?: string;
 
   @ApiProperty({
     example: null,

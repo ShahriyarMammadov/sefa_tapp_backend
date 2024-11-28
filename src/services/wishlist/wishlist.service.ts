@@ -10,6 +10,7 @@ import { WishlistDto } from '../../dto/wishlist/create-wishlist.dto';
 import { Clinics } from '../../schema/clinics';
 import { AppUsers } from 'src/schema/users';
 import { Pharmacy } from 'src/schema/pharmacy';
+import { PharmacyProducts } from 'src/schema/pharmacyProducts';
 
 @Injectable()
 export class WishlistService {
@@ -18,10 +19,12 @@ export class WishlistService {
     @InjectModel(AppUsers.name) private readonly userModel: Model<AppUsers>,
     @InjectModel(Clinics.name) private readonly clinicModel: Model<Clinics>,
     @InjectModel(Pharmacy.name) private readonly pharmacyModel: Model<Pharmacy>,
+    @InjectModel(PharmacyProducts.name)
+    private readonly pharmacyProductsModel: Model<PharmacyProducts>,
   ) {}
 
   async createWishlist(wishlistDto: WishlistDto): Promise<Wishlist> {
-    const { userID, medicineID, clinicID, pharmacyID } = wishlistDto;
+    const { userID, pharmacyProductId, clinicID, pharmacyID } = wishlistDto;
 
     // Validate if userID is a valid MongoDB ObjectId
     if (!isValidObjectId(userID)) {
@@ -40,26 +43,26 @@ export class WishlistService {
     }
 
     // Ensure at least one of medicineID or clinicID is provided
-    if (!medicineID && !clinicID && !pharmacyID) {
+    if (!pharmacyProductId && !clinicID && !pharmacyID) {
       throw new BadRequestException(
-        'Either medicineID, clinicID or pharmacyID must be provided.',
+        'Either pharmacyProductId, clinicID or pharmacyID must be provided.',
       );
     }
 
-    // Validate medicineID and clinicID
-    // if (medicineID) {
-    //   if (!isValidObjectId(medicineID)) {
-    //     throw new BadRequestException(`Invalid medicine ID format.`);
-    //   }
+    if (pharmacyProductId) {
+      if (!isValidObjectId(pharmacyProductId)) {
+        throw new BadRequestException(`Invalid pharmacy product ID format.`);
+      }
 
-    //   const medicineExists = await this.checkMedicineExists(medicineID);
+      const pharmacyProductExists =
+        await this.checkPharmacyProductsExists(pharmacyProductId);
 
-    //   if (!medicineExists) {
-    //     throw new NotFoundException(
-    //       `Medicine with ID ${medicineID} not found.`,
-    //     );
-    //   }
-    // }
+      if (!pharmacyProductExists) {
+        throw new NotFoundException(
+          `Pharmacy product with ID ${pharmacyProductId} not found.`,
+        );
+      }
+    }
 
     if (clinicID) {
       if (!isValidObjectId(clinicID)) {
@@ -99,9 +102,24 @@ export class WishlistService {
 
     const wishlists = await this.wishlistModel
       .find({ userID: userID })
-      // .populate('medicineID')
-      .populate('clinicID')
-      .populate('pharmacyID')
+      .populate({
+        path: 'pharmacyProductId',
+        select:
+          '_id name numberAvailable averageRating price images pharmacyId',
+        populate: {
+          path: 'pharmacyId',
+          select: '_id openHours name location rating images',
+        },
+      })
+      .populate({
+        path: 'clinicID',
+        select: '_id name location rating imageURL',
+      })
+      .populate({
+        path: 'pharmacyID',
+        select: '_id openHours name location rating images',
+      })
+      .select('-__v -userID')
       .exec();
 
     if (!wishlists || wishlists.length === 0) {
@@ -126,10 +144,14 @@ export class WishlistService {
   }
 
   // Mock validation methods
-  // private async checkMedicineExists(medicineID: string): Promise<boolean> {
-  //   const medicine = await this.medicineModel.findById(medicineID).exec();
-  //   return !!medicine;
-  // }
+  private async checkPharmacyProductsExists(
+    pharmacyProductId: string,
+  ): Promise<boolean> {
+    const medicine = await this.pharmacyProductsModel
+      .findById(pharmacyProductId)
+      .exec();
+    return !!medicine;
+  }
 
   private async checkClinicExists(clinicID: string): Promise<boolean> {
     const clinic = await this.clinicModel.findById(clinicID).exec();

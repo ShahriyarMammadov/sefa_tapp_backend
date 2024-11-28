@@ -44,6 +44,10 @@ export class PharmacyProductsService {
   async findAll(): Promise<any[]> {
     const products = await this.pharmacyProductsModel
       .find()
+      .populate({
+        path: 'pharmacyId',
+        select: 'openHours name images createdAt rating',
+      })
       .select('_id numberAvailable averageRating images price createdAt')
       .exec();
 
@@ -78,14 +82,27 @@ export class PharmacyProductsService {
       throw new BadRequestException(`Invalid ID format.`);
     }
 
-    const product = await this.pharmacyProductsModel.findById(id).exec();
+    const product = await this.pharmacyProductsModel
+      .findById(id)
+      .populate({
+        path: 'pharmacyId',
+        select: 'openHours name images createdAt rating',
+      })
+      .exec();
+
     if (!product) {
       throw new NotFoundException(`Pharmacy product with ID ${id} not found.`);
     }
 
     const comments = await this.CommentsModel.find({
       pharmacyProduct: id,
-    }).exec();
+    })
+      .select('_id user comment rating createdAt')
+      .populate({
+        path: 'user',
+        select: 'fullName email profileImageUrl',
+      })
+      .exec();
 
     const averageRating =
       comments.reduce((sum, comment) => sum + (comment.rating || 0), 0) /
@@ -134,13 +151,5 @@ export class PharmacyProductsService {
     if (!result) {
       throw new NotFoundException(`Pharmacy product with ID ${id} not found`);
     }
-  }
-
-  async calculateAverageRating(id: string): Promise<void> {
-    if (!isValidObjectId(id)) {
-      throw new BadRequestException(`Invalid ID format.`);
-    }
-
-    const comments = await this.CommentsModel.findById(id);
   }
 }
