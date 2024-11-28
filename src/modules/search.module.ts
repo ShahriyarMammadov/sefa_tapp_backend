@@ -5,11 +5,16 @@ import { SearchController } from 'src/controller/search/search.controller';
 import { SearchService } from 'src/services/search/search.service';
 import { Pharmacy, PharmacySchema } from 'src/schema/pharmacy';
 import { Clinics, ClinicsSchema } from 'src/schema/clinics';
+import {
+  PharmacyProducts,
+  PharmacyProductsSchema,
+} from 'src/schema/pharmacyProducts';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Pharmacy.name, schema: PharmacySchema },
+      { name: PharmacyProducts.name, schema: PharmacyProductsSchema },
       { name: Clinics.name, schema: ClinicsSchema },
       { name: Doctor.name, schema: DoctorSchema },
     ]),

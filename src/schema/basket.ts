@@ -8,14 +8,14 @@ export class Basket extends Document {
     ref: 'AppUsers',
     required: true,
   })
-  user: string;
+  userId: string;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,
-    ref: 'Pharmacy',
+    ref: 'PharmacyProducts',
     required: true,
   })
-  pharmacy: string;
+  pharmacyProductId: string;
 }
 
 export const BasketSchema = SchemaFactory.createForClass(Basket);

@@ -20,6 +20,7 @@ import { ReservationModule } from './modules/reservation.module';
 import { SearchModule } from './modules/search.module';
 import { RejectReservJobModule } from './modules/rejectReservJob.module';
 import { PharmacyProductsModule } from './modules/pharmacyProducts.module';
+import { BasketModule } from './modules/basket.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { PharmacyProductsModule } from './modules/pharmacyProducts.module';
     ReservationModule,
     SearchModule,
     PharmacyProductsModule,
+    BasketModule,
   ],
   controllers: [AppController],
   providers: [AppService, EmailService],
