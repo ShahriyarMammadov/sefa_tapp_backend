@@ -24,9 +24,7 @@ import { BasketModule } from './modules/basket.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      'mongodb+srv://SefaTapp:sehriyar4473@cluster0.n9byabe.mongodb.net/?retryWrites=true&w=majority',
-    ),
+    MongooseModule.forRoot(''),
     MulterModule.register({
       dest: './uploads',
     }),
